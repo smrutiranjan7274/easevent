@@ -1,0 +1,4 @@
+#Wed Nov 09 12:31:48 IST 2022
+base.0=C\:\\Users\\srb\\Documents\\GitHub\\easevent\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
+renamed.0=classes.dex
+path.0=classes.dex

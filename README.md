@@ -1,6 +1,6 @@
 # easevent
 
-An event management application
+An event management cross-platform application
 
 ## Getting Started
 

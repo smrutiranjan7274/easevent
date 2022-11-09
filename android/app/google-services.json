@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "173833410537",
+    "project_id": "easevent-c1fbb",
+    "storage_bucket": "easevent-c1fbb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:173833410537:android:4f89208b88521ea03e9d78",
+        "android_client_info": {
+          "package_name": "com.ems.easevent"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "173833410537-lh36j1rrus44528idb7a4dr79dgrd2k7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ems.easevent",
+            "certificate_hash": "896f5b797ecd270557c0fe31935c50bd1eb95703"
+          }
+        },
+        {
+          "client_id": "173833410537-3ireu67g30ep4otire9cfpgjdtnvdluv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCzJaLBGVfbjZR5BafJRm8K3QVYAAQdGkg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "173833410537-3ireu67g30ep4otire9cfpgjdtnvdluv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

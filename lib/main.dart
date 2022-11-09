@@ -1,10 +1,9 @@
 // ignore_for_file: prefer_const_constructors, depend_on_referenced_packages
 
+import 'package:easevent/pages/main_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import 'package:easevent/pages/login_page.dart';
 
 import 'utils/app_color.dart';
 
@@ -29,7 +28,7 @@ class MyApp extends StatelessWidget {
           Theme.of(context).textTheme,
         ),
       ),
-      home: const LoginPage(),
+      home: const MainPage(),
     );
   }
 }

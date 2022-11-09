@@ -26,7 +26,7 @@
 21        android:debuggable="true"
 22        android:extractNativeLibs="false"
 23        android:icon="@mipmap/ic_launcher"
-24        android:label="easevent" >
+24        android:label="Easevent" >
 25        <activity
 26            android:name="com.ems.easevent.MainActivity"
 27            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"

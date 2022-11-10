@@ -1,7 +1,8 @@
 # Easevent - EMS (Event Management System)
 // TODO: Logo
 
-An event management cross-platform application
+
+**> An event management cross-platform application**
 
 ## Description
 //TODO

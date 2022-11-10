@@ -2,7 +2,7 @@
 // TODO: Logo
 
 
-**> An event management cross-platform application**
+> An event management cross-platform application
 
 ## Description
 //TODO

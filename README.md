@@ -1,4 +1,4 @@
-# easevent
+# Easevent
 // TODO: Logo
 An event management cross-platform application
 

@@ -1,10 +1,14 @@
 # easevent
-
+// TODO: Logo
 An event management cross-platform application
 
-## Getting Started
+## Description
+//TODO
 
-This project is a starting point for a Flutter application.
+## App Screenshots
+//TODO
+
+## Getting Started with Flutter
 
 A few resources to get you started if this is your first Flutter project:
 

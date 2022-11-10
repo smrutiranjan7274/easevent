@@ -9,6 +9,8 @@ class AppTextField extends StatelessWidget {
   TextEditingController? controller;
   Icon? suffixIcon;
   Icon? prefixIcon;
+  TextInputType? keyboardType;
+
   // InkWell? suffix;
 
   AppTextField({
@@ -18,6 +20,7 @@ class AppTextField extends StatelessWidget {
     this.controller,
     this.prefixIcon,
     this.suffixIcon,
+    this.keyboardType,
     // this.suffix,
   });
 
@@ -28,6 +31,7 @@ class AppTextField extends StatelessWidget {
       child: TextField(
         controller: controller,
         obscureText: isPassword,
+        keyboardType: keyboardType,
         decoration: InputDecoration(
           prefixIcon: prefixIcon,
           suffixIcon: suffixIcon,

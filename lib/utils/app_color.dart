@@ -55,6 +55,6 @@ class AppColors {
 
   static Color cBackground = const Color.fromARGB(255, 178, 178, 178);
   static Color cTextFieldBackground = const Color.fromARGB(255, 241, 241, 241);
-  static Color cError = const Color.fromARGB(255, 159, 2, 2);
+  static Color cError = const Color.fromARGB(255, 192, 10, 10);
   static Color cSuccess = const Color.fromARGB(255, 2, 159, 2);
 }

@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:easevent/pages/forgot_pw_page.dart';
 import 'package:easevent/utils/app_color.dart';
 import 'package:easevent/widgets/app_button.dart';
 import 'package:easevent/widgets/app_snackbar.dart';
@@ -94,26 +95,57 @@ class _LoginPageState extends State<LoginPage> {
                   prefixIcon: Icon(Icons.lock),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text(
-                        'Show Password ?',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          TextButton(
+                            onPressed: _togglePassowrdView,
+                            style: ButtonStyle(
+                              padding:
+                                  MaterialStateProperty.all(EdgeInsets.zero),
+                              minimumSize: MaterialStateProperty.all(Size.zero),
+                            ),
+                            child: Checkbox(
+                              value: !_isHidden,
+                              onChanged: (value) {
+                                _togglePassowrdView();
+                              },
+                              activeColor: AppColors.cPrimaryAccent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(3),
+                              ),
+                            ),
+                          ),
+                          Text(
+                            'Show Password ?',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
                       ),
-                      TextButton(
-                        onPressed: _togglePassowrdView,
-                        child: Checkbox(
-                          value: !_isHidden,
-                          onChanged: (value) {
-                            _togglePassowrdView();
-                          },
-                          activeColor: AppColors.cPrimaryAccent,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(3),
+                      SizedBox(width: 50),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return ForgotPasswordPage(
+                                  title: 'Reset Password',
+                                );
+                              },
+                            ),
+                          );
+                        },
+                        child: Text(
+                          'Forgot Password ?',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.cSecondary,
                           ),
                         ),
                       ),
@@ -145,7 +177,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: Text(
                         'Register Now',
                         style: TextStyle(
-                          color: AppColors.cSecondary,
+                          color: AppColors.cPrimaryAccent,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -162,6 +194,14 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future signIn() async {
+    // Show loading circle
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Center(child: CircularProgressIndicator());
+      },
+    );
+
     if (isValidEmail() && isValidPassword()) {
       try {
         await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -181,6 +221,10 @@ class _LoginPageState extends State<LoginPage> {
             context, 'Something went wrong! Please try again later.');
       }
     }
+
+    // Pop loading circle
+    // ignore: use_build_context_synchronously
+    Navigator.of(context).pop();
   }
 
   bool isValidEmail() {
@@ -191,10 +235,10 @@ class _LoginPageState extends State<LoginPage> {
         .hasMatch(email);
 
     if (_emailController.text.trim().isEmpty) {
-      AppSnackbar.showErrorSnackBar(context, 'Email can not be empty!');
+      AppSnackbar.showErrorSnackBar(context, 'Email can not be empty !');
       return false;
     } else if (!emailValid) {
-      AppSnackbar.showErrorSnackBar(context, 'Email is not valid!');
+      AppSnackbar.showErrorSnackBar(context, 'Email is not valid !');
       return false;
     } else {
       return true;
@@ -203,7 +247,7 @@ class _LoginPageState extends State<LoginPage> {
 
   bool isValidPassword() {
     if (_passwordController.text.trim().isEmpty) {
-      AppSnackbar.showErrorSnackBar(context, 'Password can not be empty!');
+      AppSnackbar.showErrorSnackBar(context, 'Password can not be empty !');
       return false;
     } else {
       return true;

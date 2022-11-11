@@ -1,11 +1,13 @@
 // ignore_for_file: prefer_const_constructors, depend_on_referenced_packages
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easevent/utils/app_color.dart';
 import 'package:easevent/widgets/app_button.dart';
 import 'package:easevent/widgets/app_textfield.dart';
 import 'package:easevent/widgets/app_snackbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class RegisterPage extends StatefulWidget {
   final VoidCallback showLoginPage;
@@ -23,7 +25,11 @@ class _RegisterPageState extends State<RegisterPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  final _firstNameController = TextEditingController();
+  final _lastNameController = TextEditingController();
+  final _phoneController = TextEditingController();
 
+  // To show/hide password
   bool _isHidden = true;
 
   // Dispose text controllers
@@ -56,9 +62,9 @@ class _RegisterPageState extends State<RegisterPage> {
                 // SizedBox(height: 20),
                 Image.asset(
                   'assets/logo/logo.png',
-                  height: 200,
+                  height: 100,
                 ),
-
+                SizedBox(height: 20),
                 // Greeting
                 Text(
                   'Welcome to Easevent!',
@@ -77,6 +83,24 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 SizedBox(height: 40),
 
+                // First Name Textfield
+                AppTextField(
+                  controller: _firstNameController,
+                  hintText: 'First Name',
+                  isPassword: false,
+                  prefixIcon: const Icon(Icons.person),
+                ),
+                SizedBox(height: 10),
+
+                // Last Name Textfield
+                AppTextField(
+                  controller: _lastNameController,
+                  hintText: 'Last Name',
+                  isPassword: false,
+                  prefixIcon: const Icon(Icons.person),
+                ),
+                SizedBox(height: 10),
+
                 // Email Textfield
                 AppTextField(
                   controller: _emailController,
@@ -85,7 +109,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   keyboardType: TextInputType.emailAddress,
                   prefixIcon: Icon(Icons.email),
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: 10),
 
                 // Password Textfield
                 AppTextField(
@@ -95,7 +119,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   keyboardType: TextInputType.visiblePassword,
                   prefixIcon: Icon(Icons.lock),
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: 10),
 
                 // Confirm Password Textfield
                 AppTextField(
@@ -108,18 +132,16 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 // Toggle Show password
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text(
-                        'Show Password ?',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
                       TextButton(
                         onPressed: _togglePassowrdView,
+                        style: ButtonStyle(
+                          padding: MaterialStateProperty.all(EdgeInsets.zero),
+                          minimumSize: MaterialStateProperty.all(Size.zero),
+                        ),
                         child: Checkbox(
                           value: !_isHidden,
                           onChanged: (value) {
@@ -129,6 +151,12 @@ class _RegisterPageState extends State<RegisterPage> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(3),
                           ),
+                        ),
+                      ),
+                      Text(
+                        'Show Password ?',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ],
@@ -141,6 +169,29 @@ class _RegisterPageState extends State<RegisterPage> {
                 AppButton(
                   text: 'Sign Up',
                   onPressed: signUp,
+                ),
+                SizedBox(height: 20),
+
+                SizedBox(
+                  width: Get.width * 0.8,
+                  child: RichText(
+                    textAlign: TextAlign.center,
+                    text: const TextSpan(
+                      children: [
+                        TextSpan(
+                            text: 'By signing up, you agree our ',
+                            style: TextStyle(
+                                color: Color(0xff262628), fontSize: 12)),
+                        TextSpan(
+                          text: 'terms, data policy and cookies policy',
+                          style: TextStyle(
+                              color: Color(0xff262628),
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
                 SizedBox(height: 30),
 
@@ -159,7 +210,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       child: Text(
                         'Sign In',
                         style: TextStyle(
-                          color: AppColors.cSecondary,
+                          color: AppColors.cPrimaryAccent,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -177,20 +228,36 @@ class _RegisterPageState extends State<RegisterPage> {
 
   // Sign Up Function
   Future signUp() async {
+    // Get text from textfield
+    final firstName = _firstNameController.text.trim();
+    final lastName = _lastNameController.text.trim();
+    final email = _emailController.text.trim();
+
+    // Show loading circle
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Center(child: CircularProgressIndicator());
+      },
+    );
+
     if (isValidEmail() && passwordMatch()) {
       try {
-        // ignore: unused_local_variable
-        UserCredential userCredential =
-            await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        // Create user
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: _emailController.text.trim(),
           password: _passwordController.text.trim(),
         );
-        //ignore:avoid_print
-        // print(userCredential);
+        // After user created, add user details to firestore
+        addUserDetails(
+          firstName,
+          lastName,
+          email,
+        );
       } on FirebaseAuthException catch (e) {
         if (e.code == 'weak-password') {
           AppSnackbar.showErrorSnackBar(
-              context, 'The password provided is too weak or short!');
+              context, 'The password provided is too weak or short !');
           //ignore:avoid_print
           // print('The password provided is too weak.');
         } else if (e.code == 'email-already-in-use') {
@@ -204,6 +271,19 @@ class _RegisterPageState extends State<RegisterPage> {
             context, 'Something went wrong! Please try again later.');
       }
     }
+    // Pop loading circle
+    // ignore: use_build_context_synchronously
+    Navigator.of(context).pop();
+  }
+
+  Future addUserDetails(String firstName, String lastName, String email) async {
+    await FirebaseFirestore.instance.collection('users').add(
+      {
+        'firstName': firstName,
+        'lastName': lastName,
+        'email': email,
+      },
+    );
   }
 
   bool isValidEmail() {
@@ -214,10 +294,10 @@ class _RegisterPageState extends State<RegisterPage> {
         .hasMatch(email);
 
     if (_emailController.text.trim().isEmpty) {
-      AppSnackbar.showErrorSnackBar(context, 'Email can not be empty!');
+      AppSnackbar.showErrorSnackBar(context, 'Email can not be empty !');
       return false;
     } else if (!emailValid) {
-      AppSnackbar.showErrorSnackBar(context, 'Email is not valid!');
+      AppSnackbar.showErrorSnackBar(context, 'Email is not valid !');
       return false;
     } else {
       return true;
@@ -229,7 +309,7 @@ class _RegisterPageState extends State<RegisterPage> {
         _confirmPasswordController.text.trim()) {
       return true;
     } else {
-      AppSnackbar.showErrorSnackBar(context, 'Passwords do not match!');
+      AppSnackbar.showErrorSnackBar(context, 'Passwords do not match !');
       return false;
     }
   }

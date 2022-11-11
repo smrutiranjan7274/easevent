@@ -16,29 +16,51 @@ class _HomePageState extends State<HomePage> {
   // Get Current User
   final user = FirebaseAuth.instance.currentUser!;
 
+  // Is loading
+  bool _isLoading = false;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        elevation: 0,
-        actions: [
-          IconButton(
-            onPressed: () {
-              FirebaseAuth.instance.signOut();
-            },
-            icon: Icon(Icons.logout),
-          ),
-        ],
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Welcome, ${user.email!}'),
-          ],
-        ),
-      ),
-    );
+    return _isLoading
+        ? Center(child: CircularProgressIndicator())
+        : Scaffold(
+            appBar: AppBar(
+              title: Text(widget.title),
+              elevation: 0,
+              actions: [
+                _isLoading
+                    ? const Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : IconButton(
+                        onPressed: signOut,
+                        icon: const Icon(Icons.logout),
+                      ),
+              ],
+            ),
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Welcome, ${user.email!}'),
+                ],
+              ),
+            ),
+          );
+  }
+
+  Future signOut() async {
+    // Set loading to true
+    setState(() {
+      _isLoading = true;
+    });
+
+    // Sign Out
+    await FirebaseAuth.instance.signOut();
+
+    // Set loading to false
+    setState(() {
+      _isLoading = false;
+    });
   }
 }

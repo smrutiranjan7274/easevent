@@ -40,7 +40,6 @@ dependencies:
   get: ^4.6.5
   font_awesome_flutter: ^10.2.1
 
-
   # Firebase
   firebase_auth: ^4.1.1
   cloud_firestore: ^4.0.5
@@ -72,6 +71,8 @@ flutter:
     - assets/images/
     - assets/logo/
     - assets/socials/
+    - assets/icons/
+
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -2,9 +2,9 @@
 
 import 'package:easevent/pages/forgot_pw_page.dart';
 import 'package:easevent/utils/app_color.dart';
-import 'package:easevent/widgets/app_button.dart';
-import 'package:easevent/widgets/app_snackbar.dart';
-import 'package:easevent/widgets/app_textfield.dart';
+import 'package:easevent/utils/app_button.dart';
+import 'package:easevent/utils/app_snackbar.dart';
+import 'package:easevent/utils/app_textfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -81,6 +81,8 @@ class _LoginPageState extends State<LoginPage> {
                   controller: _emailController,
                   hintText: 'Email',
                   isPassword: false,
+                  textInputAction: TextInputAction.next,
+                  textCapitalization: TextCapitalization.none,
                   keyboardType: TextInputType.emailAddress,
                   prefixIcon: Icon(Icons.email),
                 ),
@@ -92,65 +94,61 @@ class _LoginPageState extends State<LoginPage> {
                   hintText: 'Password',
                   isPassword: _isHidden,
                   keyboardType: TextInputType.visiblePassword,
+                  textInputAction: TextInputAction.done,
+                  textCapitalization: TextCapitalization.none,
                   prefixIcon: Icon(Icons.lock),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                  child: Row(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          TextButton(
-                            onPressed: _togglePassowrdView,
-                            style: ButtonStyle(
-                              padding:
-                                  MaterialStateProperty.all(EdgeInsets.zero),
-                              minimumSize: MaterialStateProperty.all(Size.zero),
-                            ),
-                            child: Checkbox(
-                              value: !_isHidden,
-                              onChanged: (value) {
-                                _togglePassowrdView();
-                              },
-                              activeColor: AppColors.cPrimaryAccent,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(3),
-                              ),
-                            ),
+
+                // Toggle Password Visibility
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                          onPressed: _togglePassowrdView,
+                          style: ButtonStyle(
+                            padding:
+                                MaterialStateProperty.all(EdgeInsets.all(0)),
                           ),
-                          Text(
-                            'Show Password ?',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(width: 50),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return ForgotPasswordPage(
-                                  title: 'Reset Password',
-                                );
-                              },
-                            ),
-                          );
-                        },
-                        child: Text(
-                          'Forgot Password ?',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.cSecondary,
+                          child: Row(
+                            children: [
+                              Text('  '),
+                              _isHidden
+                                  ? Icon(Icons.visibility_off)
+                                  : Icon(Icons.visibility),
+                              Text('  Password  ')
+                            ],
                           ),
                         ),
+                      ],
+                    ),
+                    SizedBox(height: 20),
+
+                    // Reset Password Page Button
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return ForgotPasswordPage(
+                                title: 'Reset Password',
+                              );
+                            },
+                          ),
+                        );
+                      },
+                      child: Text(
+                        'Forgot Password ?',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.cSecondary,
+                        ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
 
                 SizedBox(height: 20),
@@ -223,7 +221,7 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     // Pop loading circle
-    // ignore: use_build_context_synchronously
+    if (!mounted) return;
     Navigator.of(context).pop();
   }
 

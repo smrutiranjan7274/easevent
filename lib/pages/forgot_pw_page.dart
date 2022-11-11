@@ -1,9 +1,9 @@
 // ignore_for_file: prefer_const_constructors, depend_on_referenced_packages
 
 import 'package:easevent/utils/app_color.dart';
-import 'package:easevent/widgets/app_button.dart';
-import 'package:easevent/widgets/app_snackbar.dart';
-import 'package:easevent/widgets/app_textfield.dart';
+import 'package:easevent/utils/app_button.dart';
+import 'package:easevent/utils/app_snackbar.dart';
+import 'package:easevent/utils/app_textfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -55,6 +55,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               controller: _emailController,
               hintText: 'Email',
               isPassword: false,
+              textCapitalization: TextCapitalization.none,
               prefixIcon: const Icon(Icons.email),
             ),
             SizedBox(height: 20),

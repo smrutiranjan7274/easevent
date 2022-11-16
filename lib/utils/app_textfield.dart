@@ -38,9 +38,10 @@ class AppTextField extends StatelessWidget {
         textCapitalization: textCapitalization,
         textInputAction: textInputAction,
         decoration: InputDecoration(
+          label: Text(hintText),
           prefixIcon: prefixIcon,
           suffixIcon: suffixIcon,
-          hintText: hintText,
+          // hintText: hintText,
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(
               color: AppColors.cBackground,

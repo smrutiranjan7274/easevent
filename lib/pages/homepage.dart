@@ -1,9 +1,5 @@
-// ignore_for_file: prefer_const_constructors
-
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easevent/screens/events_screen.dart';
 import 'package:easevent/screens/profile_screen.dart';
-import 'package:easevent/utils/app_color.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -16,13 +12,11 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   // Screens
   final screens = [
-    Center(
+    const Center(
       child: Text('Explore'),
     ),
-    Center(
-      child: Text('Events'),
-    ),
-    ProfileScreen(),
+    const EventsScreen(),
+    const ProfileScreen(),
   ];
 
   // Buttom Navigation Bar Index
@@ -34,7 +28,7 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: NavigationBarTheme(
         data: NavigationBarThemeData(
           labelTextStyle: MaterialStateProperty.all(
-            TextStyle(fontWeight: FontWeight.bold),
+            const TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
         child: NavigationBar(

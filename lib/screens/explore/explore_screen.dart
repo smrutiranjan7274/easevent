@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easevent/utils/app_color.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'get_event_details.dart';
@@ -94,13 +95,15 @@ class _ExploreScreenState extends State<ExploreScreen> {
         .collection('events')
         .orderBy("date", descending: false)
         .get()
-        .then(
-          (eventsSnapshot) => eventsSnapshot.docs.forEach(
-            (event) {
-              print(event.reference.id);
-              eventIds.add(event.reference.id);
-            },
-          ),
-        );
+        .then((eventsSnapshot) {
+      for (var event in eventsSnapshot.docs) {
+        {
+          if (kDebugMode) {
+            print(event.reference.id);
+          }
+          eventIds.add(event.reference.id);
+        }
+      }
+    });
   }
 }

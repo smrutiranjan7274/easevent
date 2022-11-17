@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easevent/pages/profile/update_profile_page.dart';
 import 'package:easevent/utils/app_color.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -38,7 +38,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     String profileImagePath = 'assets/icons/blank_profile_picture.png';
     // Image from Firebase
     String profileImageURL = user.photoURL.toString();
-    print(profileImageURL);
+    if (kDebugMode) {
+      print(profileImageURL);
+    }
 
     return SafeArea(
       child: SingleChildScrollView(

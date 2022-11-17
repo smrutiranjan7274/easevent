@@ -312,6 +312,7 @@ class _RegisterPageState extends State<RegisterPage> {
         'last name': lastName,
         'email': email,
         'phone number': phoneNumber,
+        'photoURL': '',
       },
     );
   }

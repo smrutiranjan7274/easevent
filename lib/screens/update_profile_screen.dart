@@ -28,6 +28,9 @@ class _UpdateProfileState extends State<UpdateProfile> {
 
   @override
   Widget build(BuildContext context) {
+    _firstNameController.text = user.displayName!.split(' ')[0];
+    _lastNameController.text = user.displayName!.split(' ')[1];
+    _emailController.text = user.email!;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -45,16 +48,12 @@ class _UpdateProfileState extends State<UpdateProfile> {
                     },
                     child: Column(
                       children: [
-                        Container(
-                          margin: const EdgeInsets.only(top: 20),
-                          width: 150,
-                          height: 150,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                              image: AssetImage(_image.path),
-                              fit: BoxFit.cover,
-                            ),
+                        const SizedBox(height: 10),
+                        Text(
+                          'Change Profile Picture',
+                          style: TextStyle(
+                            color: AppColors.mPrimary,
+                            fontSize: 16,
                           ),
                         ),
                       ],
@@ -131,27 +130,33 @@ class _UpdateProfileState extends State<UpdateProfile> {
           await StorageRepo().uploadFile(_image, 'user/profile/${user.uid}');
       final uid = user.uid;
       // Update User Profile in Firebase Fireauth
-      await user.updateEmail(_emailController.text.trim());
-      await user.updateDisplayName(
+      user.updateEmail(_emailController.text.trim());
+      user.updateDisplayName(
           '${_firstNameController.text.trim()} ${_lastNameController.text.trim()}');
-      await user.updatePhotoURL(profileImageURL);
+      user.updatePhotoURL(profileImageURL);
 
       // Update User Details in Firebase Firestore
-      await FirebaseFirestore.instance.collection('users').doc(uid).update(
+      FirebaseFirestore.instance.collection('users').doc(uid).update(
         {
           'first name': _firstNameController.text.trim(),
           'last name': _lastNameController.text.trim(),
           'email': _emailController.text.trim(),
-          'photoURL': profileImageURL,
+          'photoURL': user.photoURL,
         },
       );
       if (!mounted) return;
       // Show success snackbar
+      // Pop loading circle
+      if (!mounted) return;
+      Navigator.of(context).pop();
       return AppSnackbar.showSuccessSnackBar(
           context, 'Profile Updated Successfully!');
     } on FirebaseAuthException catch (e) {
       // print(e);
       if (e.code == 'requires-recent-login') {
+        // Pop loading circle
+        if (!mounted) return;
+        Navigator.of(context).pop();
         return AppSnackbar.showErrorSnackBar(
             context, 'Please re-login to update your profile');
       }
@@ -159,13 +164,12 @@ class _UpdateProfileState extends State<UpdateProfile> {
       if (kDebugMode) {
         print(e);
       }
+      // Pop loading circle
+      if (!mounted) return;
+      Navigator.of(context).pop();
       return AppSnackbar.showErrorSnackBar(
           context, 'Error updating your profile. Please try again later!');
     }
-
-    // Pop loading circle
-    if (!mounted) return;
-    Navigator.of(context).pop();
   }
 
   void _showPicker(BuildContext context) {
@@ -209,22 +213,26 @@ class _UpdateProfileState extends State<UpdateProfile> {
   }
 
   Future _imgFromCamera() async {
-    final pickedFile = await ImagePicker().pickImage(
-      source: ImageSource.camera,
-      imageQuality: 50,
-    );
-    setState(() {
-      _image = File(pickedFile!.path);
-    });
+    await ImagePicker()
+        .pickImage(source: ImageSource.camera, imageQuality: 50)
+        .then(
+          (image) => setState(
+            () {
+              _image = File(image!.path);
+            },
+          ),
+        );
   }
 
   Future _imgFromGallery() async {
-    final pickedFile = await ImagePicker().pickImage(
-      source: ImageSource.gallery,
-      imageQuality: 50,
-    );
-    setState(() {
-      _image = File(pickedFile!.path);
-    });
+    await ImagePicker()
+        .pickImage(source: ImageSource.gallery, imageQuality: 50)
+        .then(
+          (image) => setState(
+            () {
+              _image = File(image!.path);
+            },
+          ),
+        );
   }
 }

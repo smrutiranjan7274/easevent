@@ -147,7 +147,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
       user.updatePhotoURL(profileImageURL);
 
       // Update User Details in Firebase Firestore
-      FirebaseFirestore.instance.collection('users').doc(uid).update(
+      await FirebaseFirestore.instance.collection('users').doc(uid).update(
         {
           'first name': _firstNameController.text.trim(),
           'last name': _lastNameController.text.trim(),

@@ -1,4 +1,5 @@
 import 'package:easevent/screens/events/events_screen.dart';
+import 'package:easevent/screens/explore/explore_screen.dart';
 import 'package:easevent/screens/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -11,10 +12,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   // Screens
-  final screens = [
-    const Center(
-      child: Text('Explore'),
-    ),
+  final List<Widget> screens = [
+    const ExploreScreen(),
     const EventsScreen(),
     const ProfileScreen(),
   ];

@@ -54,8 +54,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             AppTextField(
               controller: _emailController,
               hintText: 'Email',
+              maxLines: 1,
               isPassword: false,
               textCapitalization: TextCapitalization.none,
+              textInputAction: TextInputAction.done,
               prefixIcon: const Icon(Icons.email),
             ),
             SizedBox(height: 20),
@@ -71,11 +73,20 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
   // Function to send reset password link to email
   Future passwordReset() async {
+    // Show loading indicator
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Center(child: CircularProgressIndicator());
+      },
+    );
+
     if (isValidEmail()) {
       try {
         await FirebaseAuth.instance
             .sendPasswordResetEmail(email: _emailController.text.trim());
-        // ignore: use_build_context_synchronously
+        if (!mounted) return;
+        Navigator.of(context).pop();
         AppSnackbar.showSuccessSnackBar(
           context,
           'Password reset link sent to ${_emailController.text.trim()}',

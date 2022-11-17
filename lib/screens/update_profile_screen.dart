@@ -144,7 +144,6 @@ class _UpdateProfileState extends State<UpdateProfile> {
           'photoURL': user.photoURL,
         },
       );
-      if (!mounted) return;
       // Show success snackbar
       // Pop loading circle
       if (!mounted) return;

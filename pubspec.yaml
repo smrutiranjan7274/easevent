@@ -55,6 +55,7 @@ dependencies:
   # liquid_pull_to_refresh: ^3.0.1
   # cached_network_image: ^3.2.2
   url_launcher: ^6.1.6
+  barcode_widget: ^2.0.3
   # image_cropper: ^3.0.1
   # flutter_secure_storage: ^6.0.0
 

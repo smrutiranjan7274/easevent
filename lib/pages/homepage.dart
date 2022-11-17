@@ -1,5 +1,5 @@
-import 'package:easevent/screens/events_screen.dart';
-import 'package:easevent/screens/profile_screen.dart';
+import 'package:easevent/screens/events/events_screen.dart';
+import 'package:easevent/screens/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {

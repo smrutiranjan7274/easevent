@@ -12,6 +12,9 @@ class AppTextField extends StatelessWidget {
   TextInputType? keyboardType;
   TextCapitalization textCapitalization;
   TextInputAction? textInputAction;
+  int? minLines;
+  int? maxLines;
+  bool? enabled;
 
   // InkWell? suffix;
 
@@ -25,6 +28,9 @@ class AppTextField extends StatelessWidget {
     this.suffixIcon,
     this.keyboardType,
     this.textInputAction,
+    this.minLines,
+    this.maxLines,
+    this.enabled,
   });
 
   @override
@@ -32,13 +38,19 @@ class AppTextField extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25.0),
       child: TextField(
+        enabled: enabled,
+        minLines: minLines,
+        maxLines: maxLines,
         controller: controller,
         obscureText: isPassword,
         keyboardType: keyboardType,
         textCapitalization: textCapitalization,
         textInputAction: textInputAction,
         decoration: InputDecoration(
-          label: Text(hintText),
+          label: Text(
+            hintText,
+            style: TextStyle(color: AppColors.cPrimary),
+          ),
           prefixIcon: prefixIcon,
           suffixIcon: suffixIcon,
           // hintText: hintText,

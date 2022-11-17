@@ -27,6 +27,14 @@ class _UpdateProfileState extends State<UpdateProfile> {
   File _image = File('assets/icons/blank_profile_picture.png');
 
   @override
+  void dispose() {
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    _emailController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     _firstNameController.text = user.displayName!.split(' ')[0];
     _lastNameController.text = user.displayName!.split(' ')[1];
@@ -35,6 +43,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
       appBar: AppBar(
         elevation: 0,
         title: const Text('Edit Profile'),
+        centerTitle: true,
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -123,6 +132,8 @@ class _UpdateProfileState extends State<UpdateProfile> {
         return const Center(child: CircularProgressIndicator());
       },
     );
+
+    // TODO: Validate all fields
 
     try {
       // Upload Profile Image to Firebase Storage

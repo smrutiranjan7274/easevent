@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:easevent/screens/update_profile_screen.dart';
+import 'package:easevent/screens/profile/update_profile_screen.dart';
 import 'package:easevent/utils/app_color.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

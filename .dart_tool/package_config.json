@@ -164,6 +164,12 @@
       "languageVersion": "2.17"
     },
     {
+      "name": "flutter_barcode_scanner",
+      "rootUri": "file:///C:/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_barcode_scanner-2.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "flutter_lints",
       "rootUri": "file:///C:/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_lints-2.0.1",
       "packageUri": "lib/",
@@ -476,7 +482,7 @@
       "languageVersion": "2.18"
     }
   ],
-  "generated": "2022-11-17T00:27:01.527038Z",
+  "generated": "2022-11-17T08:34:40.036685Z",
   "generator": "pub",
   "generatorVersion": "2.18.4"
 }

@@ -7,16 +7,15 @@ import 'package:easevent/utils/app_textfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
-class CreateEventScreen extends StatefulWidget {
-  const CreateEventScreen({super.key});
+class CreateEventPage extends StatefulWidget {
+  const CreateEventPage({super.key});
 
   @override
-  State<CreateEventScreen> createState() => _CreateEventScreenState();
+  State<CreateEventPage> createState() => _CreateEventPageState();
 }
 
-class _CreateEventScreenState extends State<CreateEventScreen> {
+class _CreateEventPageState extends State<CreateEventPage> {
   String event_type = 'All';
   List<String> list_item = ['All', 'Students', 'Faculty', 'Parents'];
 

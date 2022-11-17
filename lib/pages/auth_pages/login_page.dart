@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
-import 'package:easevent/pages/forgot_pw_page.dart';
+import 'package:easevent/pages/auth_pages/forgot_pw_page.dart';
 import 'package:easevent/utils/app_color.dart';
 import 'package:easevent/utils/app_button.dart';
 import 'package:easevent/utils/app_snackbar.dart';

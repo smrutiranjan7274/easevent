@@ -1,4 +1,5 @@
-import 'package:easevent/screens/events/create_event_screen.dart';
+import 'package:easevent/pages/events/create_event_page.dart';
+import 'package:easevent/pages/events/join_event_page.dart';
 import 'package:easevent/utils/app_button.dart';
 import 'package:flutter/material.dart';
 
@@ -31,7 +32,7 @@ class _EventsScreenState extends State<EventsScreen> {
               onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const CreateEventScreen(),
+                  builder: (context) => const CreateEventPage(),
                 ),
               ),
             ),
@@ -41,7 +42,15 @@ class _EventsScreenState extends State<EventsScreen> {
               onPressed: () {},
             ),
             const SizedBox(height: 10),
-            AppButton(text: 'Join', onPressed: () {}),
+            AppButton(
+              text: 'Join',
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const JoinEventPage(),
+                ),
+              ),
+            ),
           ],
         ),
       ),

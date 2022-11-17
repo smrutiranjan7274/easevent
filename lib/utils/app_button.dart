@@ -1,12 +1,10 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, must_be_immutable
-
 import 'package:easevent/utils/app_color.dart';
 import 'package:flutter/material.dart';
 
 class AppButton extends StatelessWidget {
   final String text;
-  Function? onPressed;
-  AppButton({super.key, required this.text, required this.onPressed});
+  final Function? onPressed;
+  const AppButton({super.key, required this.text, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +20,7 @@ class AppButton extends StatelessWidget {
         ),
         child: Text(
           text,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
             fontSize: 18,
             fontWeight: FontWeight.bold,

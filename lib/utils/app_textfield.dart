@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, must_be_immutable
 import 'package:easevent/utils/app_color.dart';
 import 'package:flutter/material.dart';
 
@@ -6,19 +5,19 @@ class AppTextField extends StatelessWidget {
   final String hintText;
   final bool isPassword;
 
-  TextEditingController? controller;
-  Icon? suffixIcon;
-  Icon? prefixIcon;
-  TextInputType? keyboardType;
-  TextCapitalization textCapitalization;
-  TextInputAction? textInputAction;
-  int? minLines;
-  int? maxLines;
-  bool? enabled;
+  final TextEditingController? controller;
+  final Icon? suffixIcon;
+  final Icon? prefixIcon;
+  final TextInputType? keyboardType;
+  final TextCapitalization textCapitalization;
+  final TextInputAction? textInputAction;
+  final int? minLines;
+  final int? maxLines;
+  final bool? enabled;
 
   // InkWell? suffix;
 
-  AppTextField({
+  const AppTextField({
     super.key,
     required this.hintText,
     required this.isPassword,

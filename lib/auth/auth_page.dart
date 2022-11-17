@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, depend_on_referenced_packages
-
 import 'package:easevent/pages/auth_pages/login_page.dart';
 import 'package:easevent/pages/auth_pages/register_page.dart';
 import 'package:flutter/material.dart';

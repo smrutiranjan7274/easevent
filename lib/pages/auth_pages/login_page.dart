@@ -54,10 +54,10 @@ class _LoginPageState extends State<LoginPage> {
                 // Logo
                 // SizedBox(height: 20),
                 Image.asset(
-                  'assets/logo/logo.png',
-                  height: 200,
+                  'assets/logo/name_logo_2.png',
+                  height: 150,
                 ),
-
+                const SizedBox(height: 20),
                 // Greeting
                 Text(
                   'Welcome back!',
@@ -89,14 +89,35 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(height: 20),
 
                 // Password Textfield
-                AppTextField(
-                  controller: _passwordController,
-                  hintText: 'Password',
-                  isPassword: _isHidden,
-                  keyboardType: TextInputType.visiblePassword,
-                  textInputAction: TextInputAction.done,
-                  textCapitalization: TextCapitalization.none,
-                  prefixIcon: Icon(Icons.lock),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: TextField(
+                    controller: _passwordController,
+                    obscureText: _isHidden,
+                    keyboardType: TextInputType.visiblePassword,
+                    textInputAction: TextInputAction.done,
+                    decoration: InputDecoration(
+                      label: Text(
+                        'Password',
+                        style: TextStyle(color: AppColors.cPrimary),
+                      ),
+                      prefixIcon: Icon(Icons.lock),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: AppColors.cBackground,
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: AppColors.cPrimary,
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                    ),
+                  ),
                 ),
 
                 // Toggle Password Visibility

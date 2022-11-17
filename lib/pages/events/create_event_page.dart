@@ -1,4 +1,3 @@
-import 'package:barcode_widget/barcode_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easevent/utils/app_button.dart';
 import 'package:easevent/utils/app_color.dart';
@@ -16,7 +15,9 @@ class CreateEventPage extends StatefulWidget {
 }
 
 class _CreateEventPageState extends State<CreateEventPage> {
+  // ignore: non_constant_identifier_names
   String event_type = 'All';
+  // ignore: non_constant_identifier_names
   List<String> list_item = ['All', 'Students', 'Faculty', 'Parents'];
 
   DateTime? date = DateTime.now();

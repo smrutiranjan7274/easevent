@@ -53,14 +53,17 @@ dependencies:
 
   # Custom packages
   # liquid_pull_to_refresh: ^3.0.1
-  # cached_network_image: ^3.2.2
+  cached_network_image: ^3.2.2
   url_launcher: ^6.1.6
   
   # For creating barcode
-  barcode_widget: ^2.0.3
+  # barcode_widget: ^2.0.3
 
   # For Scanning QR code
   flutter_barcode_scanner: ^2.0.0
+
+  flutter_native_splash: ^2.2.14
+
   # image_cropper: ^3.0.1
   # flutter_secure_storage: ^6.0.0
 

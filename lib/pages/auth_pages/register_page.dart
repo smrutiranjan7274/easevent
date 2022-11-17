@@ -64,10 +64,11 @@ class _RegisterPageState extends State<RegisterPage> {
                 // Logo
                 // SizedBox(height: 20),
                 Image.asset(
-                  'assets/logo/logo.png',
+                  'assets/logo/name_logo.png',
                   height: 100,
+                  width: 200,
                 ),
-                SizedBox(height: 20),
+                // SizedBox(height: 20),
                 // Greeting
                 Text(
                   'Welcome to Easevent!',
@@ -135,26 +136,67 @@ class _RegisterPageState extends State<RegisterPage> {
                 SizedBox(height: 10),
 
                 // Password Textfield
-                AppTextField(
-                  controller: _passwordController,
-                  hintText: 'Password',
-                  isPassword: _isHidden,
-                  textInputAction: TextInputAction.next,
-                  textCapitalization: TextCapitalization.none,
-                  keyboardType: TextInputType.visiblePassword,
-                  prefixIcon: Icon(Icons.lock),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: TextField(
+                    controller: _passwordController,
+                    obscureText: _isHidden,
+                    keyboardType: TextInputType.visiblePassword,
+                    textInputAction: TextInputAction.done,
+                    decoration: InputDecoration(
+                      label: Text(
+                        'Password',
+                        style: TextStyle(color: AppColors.cPrimary),
+                      ),
+                      prefixIcon: Icon(Icons.lock),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: AppColors.cBackground,
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: AppColors.cPrimary,
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                    ),
+                  ),
                 ),
                 SizedBox(height: 10),
-
-                // Confirm Password Textfield
-                AppTextField(
-                  controller: _confirmPasswordController,
-                  hintText: 'Confirm Password',
-                  isPassword: _isHidden,
-                  textInputAction: TextInputAction.done,
-                  textCapitalization: TextCapitalization.none,
-                  keyboardType: TextInputType.visiblePassword,
-                  prefixIcon: Icon(Icons.lock),
+                // ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: TextField(
+                    controller: _confirmPasswordController,
+                    obscureText: _isHidden,
+                    keyboardType: TextInputType.visiblePassword,
+                    textInputAction: TextInputAction.done,
+                    decoration: InputDecoration(
+                      label: Text(
+                        'Password',
+                        style: TextStyle(color: AppColors.cPrimary),
+                      ),
+                      prefixIcon: Icon(Icons.lock),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: AppColors.cBackground,
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: AppColors.cPrimary,
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                    ),
+                  ),
                 ),
 
                 // Toggle Password Visibility

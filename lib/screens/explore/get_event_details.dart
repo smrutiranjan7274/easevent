@@ -104,12 +104,14 @@ class GetEventLocation extends StatelessWidget {
         if (eventDocument.connectionState == ConnectionState.done) {
           Map<String, dynamic> event =
               eventDocument.data!.data() as Map<String, dynamic>;
-          return Row(
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
                 'Location: ',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
+                  fontSize: 12,
                 ),
               ),
               Text(
@@ -117,7 +119,7 @@ class GetEventLocation extends StatelessWidget {
                 style: TextStyle(
                   color: AppColors.mPrimary,
                   fontWeight: FontWeight.bold,
-                  fontSize: 16,
+                  fontSize: 14,
                 ),
               ),
             ],

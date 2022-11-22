@@ -7,7 +7,11 @@
 //TODO
 
 ## App Screenshots
-//TODO
+<!-- ![Welcome Screen]() -->
+
+<img src="https://github.com/smrutiranjan7274/easevent/blob/main/Screenshots/register.PNG" width="25%">&ensp;&ensp;<img src="https://github.com/smrutiranjan7274/easevent/blob/main/Screenshots/login.PNG" width="25%">&ensp;&ensp;<img src="https://github.com/smrutiranjan7274/easevent/blob/main/Screenshots/reset_pwd.PNG" width="25%">
+
+<img src="https://github.com/smrutiranjan7274/easevent/blob/main/Screenshots/event_creation.PNG" width="25%">&ensp;&ensp;<img src="https://github.com/smrutiranjan7274/easevent/blob/main/Screenshots/explore.PNG" width="25%">&ensp;&ensp;<img src="https://github.com/smrutiranjan7274/easevent/blob/main/Screenshots/profile.PNG" width="25%">
 
 ## Getting Started with Flutter
 

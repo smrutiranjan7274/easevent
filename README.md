@@ -1,7 +1,7 @@
 ![Logo](https://github.com/smrutiranjan7274/easevent/blob/bf9a7951f0d99058711db33ed74898c95ae7d1ab/assets/logo/name_logo.png)
 # Easevent - EMS (Event Management System)
 
-> _An event management cross-platform application_
+> _A cross-platform event management application_
 
 ## Description
 //TODO

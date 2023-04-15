@@ -29,43 +29,48 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        elevation: 0,
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Text(
-                'Enter your email and we will send you a password reset link',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: AppColors.cPrimary,
-                  fontWeight: FontWeight.bold,
+    return Semantics(
+      label: 'Password Reset Page',
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(widget.title),
+          elevation: 0,
+        ),
+        body: SafeArea(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: Text(
+                    'Enter your email and we will send you a password reset link',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: AppColors.cPrimary,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
-                textAlign: TextAlign.center,
-              ),
+                SizedBox(height: 20),
+                AppTextField(
+                  controller: _emailController,
+                  hintText: 'Email',
+                  maxLines: 1,
+                  isPassword: false,
+                  textCapitalization: TextCapitalization.none,
+                  textInputAction: TextInputAction.done,
+                  prefixIcon: const Icon(Icons.email),
+                ),
+                SizedBox(height: 20),
+                AppButton(
+                  text: 'Reset Password',
+                  onPressed: passwordReset,
+                )
+              ],
             ),
-            SizedBox(height: 20),
-            AppTextField(
-              controller: _emailController,
-              hintText: 'Email',
-              maxLines: 1,
-              isPassword: false,
-              textCapitalization: TextCapitalization.none,
-              textInputAction: TextInputAction.done,
-              prefixIcon: const Icon(Icons.email),
-            ),
-            SizedBox(height: 20),
-            AppButton(
-              text: 'Reset Password',
-              onPressed: passwordReset,
-            )
-          ],
+          ),
         ),
       ),
     );

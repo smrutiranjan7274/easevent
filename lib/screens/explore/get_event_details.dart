@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easevent/utils/app_color.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // Get Event Name
@@ -151,9 +152,12 @@ class GetEventDescription extends StatelessWidget {
         if (eventDocument.connectionState == ConnectionState.done) {
           Map<String, dynamic> event =
               eventDocument.data!.data() as Map<String, dynamic>;
+
           return Text(
             '${event['description']}',
             textAlign: TextAlign.justify,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(
               color: AppColors.mPrimary,
               // fontWeight: FontWeight.bold,

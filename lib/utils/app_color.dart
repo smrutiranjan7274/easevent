@@ -53,8 +53,8 @@ class AppColors {
   static Color cSecondary = const Color(0xFFB5179E);
   static Color cSecondaryAccent = const Color(0xFF560BAD);
 
-  static Color cBackground = const Color.fromARGB(255, 178, 178, 178);
-  static Color cTextFieldBackground = const Color.fromARGB(255, 241, 241, 241);
+  static Color cBackground = const Color(0xFF696969);
+  static Color cTextFieldBackground = const Color.fromARGB(255, 255, 255, 255);
   static Color cError = const Color.fromARGB(255, 192, 10, 10);
   static Color cSuccess = const Color.fromARGB(255, 2, 159, 2);
 }

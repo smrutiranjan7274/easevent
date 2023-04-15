@@ -44,167 +44,191 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Logo
-                // SizedBox(height: 20),
-                Image.asset(
-                  'assets/logo/name_logo_2.png',
-                  height: 150,
-                ),
-                const SizedBox(height: 20),
-                // Greeting
-                Text(
-                  'Welcome back!',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
+      body: Semantics(
+        label: 'Login Page',
+        child: SafeArea(
+          child: Center(
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Logo
+                  // SizedBox(height: 20),
+                  Image.asset(
+                    'assets/logo/name_logo_2.png',
+                    height: 150,
                   ),
-                ),
-                // SizedBox(height: 10),
-                Text(
-                  'Sign in to continue!',
-                  style: TextStyle(
-                    fontSize: 18,
-                    // fontWeight: FontWeight.bold,
+                  const SizedBox(height: 20),
+                  // Greeting
+                  Text(
+                    'Welcome back!',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                SizedBox(height: 40),
+                  // SizedBox(height: 10),
+                  Text(
+                    'Sign in to continue!',
+                    style: TextStyle(
+                      fontSize: 18,
+                      // fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 40),
 
-                // Email Textfield
-                AppTextField(
-                  controller: _emailController,
-                  hintText: 'Email',
-                  isPassword: false,
-                  textInputAction: TextInputAction.next,
-                  textCapitalization: TextCapitalization.none,
-                  keyboardType: TextInputType.emailAddress,
-                  prefixIcon: Icon(Icons.email),
-                ),
-                SizedBox(height: 20),
+                  // Email Textfield
+                  AppTextField(
+                    controller: _emailController,
+                    hintText: 'Email',
+                    isPassword: false,
+                    textInputAction: TextInputAction.next,
+                    textCapitalization: TextCapitalization.none,
+                    keyboardType: TextInputType.emailAddress,
+                    prefixIcon: Icon(
+                      Icons.email,
+                      color: AppColors.cBackground,
+                    ),
+                  ),
+                  SizedBox(height: 20),
 
-                // Password Textfield
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: TextField(
-                    controller: _passwordController,
-                    obscureText: _isHidden,
-                    keyboardType: TextInputType.visiblePassword,
-                    textInputAction: TextInputAction.done,
-                    decoration: InputDecoration(
-                      label: Text(
-                        'Password',
-                        style: TextStyle(color: AppColors.cPrimary),
-                      ),
-                      prefixIcon: Icon(Icons.lock),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
+                  // Password Textfield
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    child: TextField(
+                      controller: _passwordController,
+                      obscureText: _isHidden,
+                      keyboardType: TextInputType.visiblePassword,
+                      textInputAction: TextInputAction.done,
+                      decoration: InputDecoration(
+                        hintText: 'Password',
+                        hintStyle: TextStyle(color: AppColors.cPrimary),
+                        prefixIcon: Icon(
+                          Icons.lock,
                           color: AppColors.cBackground,
-                          width: 2,
                         ),
-                        borderRadius: BorderRadius.circular(12.0),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: AppColors.cPrimary,
-                          width: 2,
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: AppColors.cBackground,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(12.0),
                         ),
-                        borderRadius: BorderRadius.circular(12.0),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: AppColors.cPrimary,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
                       ),
                     ),
                   ),
-                ),
+                  const SizedBox(
+                    height: 15,
+                  ),
 
-                // Toggle Password Visibility
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        TextButton(
-                          onPressed: _togglePassowrdView,
-                          style: ButtonStyle(
-                            padding:
-                                MaterialStateProperty.all(EdgeInsets.all(0)),
+                  // Toggle Password Visibility
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          TextButton(
+                            onPressed: _togglePassowrdView,
+                            style: ButtonStyle(
+                              padding:
+                                  MaterialStateProperty.all(EdgeInsets.all(0)),
+                            ),
+                            child: Row(
+                              children: [
+                                Text('  '),
+                                _isHidden
+                                    ? Icon(
+                                        Icons.visibility_off,
+                                        size: 28,
+                                      )
+                                    : Icon(
+                                        Icons.visibility,
+                                        size: 28,
+                                      ),
+                                Text(
+                                  '  Password  ',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
-                          child: Row(
-                            children: [
-                              Text('  '),
-                              _isHidden
-                                  ? Icon(Icons.visibility_off)
-                                  : Icon(Icons.visibility),
-                              Text('  Password  ')
-                            ],
+                        ],
+                      ),
+                      SizedBox(height: 20),
+
+                      // Reset Password Page Button
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return ForgotPasswordPage(
+                                  title: 'Reset Password',
+                                );
+                              },
+                            ),
+                          );
+                        },
+                        child: Text(
+                          'Forgot Password ?',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.cSecondary,
+                            fontSize: 18,
                           ),
                         ),
-                      ],
-                    ),
-                    SizedBox(height: 20),
+                      ),
+                    ],
+                  ),
 
-                    // Reset Password Page Button
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return ForgotPasswordPage(
-                                title: 'Reset Password',
-                              );
-                            },
-                          ),
-                        );
-                      },
-                      child: Text(
-                        'Forgot Password ?',
+                  SizedBox(height: 20),
+
+                  // Login Button
+                  AppButton(
+                    text: 'Sign In',
+                    onPressed: signIn,
+                  ),
+                  SizedBox(height: 30),
+
+                  // Register Button
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Not a member yet? ',
                         style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.cSecondary,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 18,
                         ),
                       ),
-                    ),
-                  ],
-                ),
-
-                SizedBox(height: 20),
-
-                // Login Button
-                AppButton(
-                  text: 'Sign In',
-                  onPressed: signIn,
-                ),
-                SizedBox(height: 30),
-
-                // Register Button
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Not a member yet? ',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: widget.showRegisterPage,
-                      child: Text(
-                        'Register Now',
-                        style: TextStyle(
-                          color: AppColors.cPrimaryAccent,
-                          fontWeight: FontWeight.w600,
+                      GestureDetector(
+                        onTap: widget.showRegisterPage,
+                        child: Text(
+                          'Register Now',
+                          style: TextStyle(
+                            color: AppColors.cPrimaryAccent,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 18,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20),
-              ],
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                ],
+              ),
             ),
           ),
         ),

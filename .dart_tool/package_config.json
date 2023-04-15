@@ -332,6 +332,12 @@
       "languageVersion": "2.17"
     },
     {
+      "name": "liquid_pull_to_refresh",
+      "rootUri": "file:///C:/flutter/.pub-cache/hosted/pub.dartlang.org/liquid_pull_to_refresh-3.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "matcher",
       "rootUri": "file:///C:/flutter/.pub-cache/hosted/pub.dartlang.org/matcher-0.12.12",
       "packageUri": "lib/",
@@ -608,7 +614,7 @@
       "languageVersion": "2.18"
     }
   ],
-  "generated": "2023-04-15T10:20:10.977542Z",
+  "generated": "2023-04-15T10:21:42.011580Z",
   "generator": "pub",
   "generatorVersion": "2.18.4"
 }

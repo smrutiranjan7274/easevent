@@ -7,6 +7,7 @@ import 'package:easevent/utils/app_textfield.dart';
 import 'package:easevent/utils/app_snackbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -54,231 +55,257 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Logo
-                // SizedBox(height: 20),
-                Image.asset(
-                  'assets/logo/name_logo.png',
-                  height: 100,
-                  width: 200,
-                ),
-                // SizedBox(height: 20),
-                // Greeting
-                Text(
-                  'Welcome to Easevent!',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
+      body: Semantics(
+        label: 'Register Page',
+        child: SafeArea(
+          child: Center(
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Logo
+                  // SizedBox(height: 20),
+                  Image.asset(
+                    'assets/logo/name_logo.png',
+                    height: 100,
+                    width: 200,
                   ),
-                ),
-                // SizedBox(height: 10),
-                Text(
-                  'Register to continue!',
-                  style: TextStyle(
-                    fontSize: 18,
-                    // fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 40),
-
-                // First Name Textfield
-                AppTextField(
-                  controller: _firstNameController,
-                  hintText: 'First Name',
-                  isPassword: false,
-                  keyboardType: TextInputType.name,
-                  textCapitalization: TextCapitalization.words,
-                  textInputAction: TextInputAction.next,
-                  prefixIcon: const Icon(Icons.person),
-                ),
-                SizedBox(height: 10),
-
-                // Last Name Textfield
-                AppTextField(
-                  controller: _lastNameController,
-                  hintText: 'Last Name',
-                  isPassword: false,
-                  keyboardType: TextInputType.name,
-                  textCapitalization: TextCapitalization.words,
-                  textInputAction: TextInputAction.next,
-                  prefixIcon: const Icon(Icons.person),
-                ),
-                SizedBox(height: 10),
-
-                // Email Textfield
-                AppTextField(
-                  controller: _emailController,
-                  hintText: 'Email',
-                  isPassword: false,
-                  keyboardType: TextInputType.emailAddress,
-                  textInputAction: TextInputAction.next,
-                  textCapitalization: TextCapitalization.none,
-                  prefixIcon: Icon(Icons.email),
-                ),
-                SizedBox(height: 10),
-
-                // Phone Textfield
-                AppTextField(
-                  controller: _phoneController,
-                  hintText: 'Phone',
-                  isPassword: false,
-                  keyboardType: TextInputType.phone,
-                  textInputAction: TextInputAction.next,
-                  textCapitalization: TextCapitalization.none,
-                  prefixIcon: Icon(Icons.phone),
-                ),
-                SizedBox(height: 10),
-
-                // Password Textfield
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: TextField(
-                    controller: _passwordController,
-                    obscureText: _isHidden,
-                    keyboardType: TextInputType.visiblePassword,
-                    textInputAction: TextInputAction.done,
-                    decoration: InputDecoration(
-                      label: Text(
-                        'Password',
-                        style: TextStyle(color: AppColors.cPrimary),
-                      ),
-                      prefixIcon: Icon(Icons.lock),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: AppColors.cBackground,
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.circular(12.0),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: AppColors.cPrimary,
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.circular(12.0),
-                      ),
+                  // SizedBox(height: 20),
+                  // Greeting
+                  Text(
+                    'Welcome to Easevent!',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                ),
-                SizedBox(height: 10),
-                // ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: TextField(
-                    controller: _confirmPasswordController,
-                    obscureText: _isHidden,
-                    keyboardType: TextInputType.visiblePassword,
-                    textInputAction: TextInputAction.done,
-                    decoration: InputDecoration(
-                      label: Text(
-                        'Password',
-                        style: TextStyle(color: AppColors.cPrimary),
-                      ),
-                      prefixIcon: Icon(Icons.lock),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: AppColors.cBackground,
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.circular(12.0),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: AppColors.cPrimary,
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.circular(12.0),
-                      ),
+                  // SizedBox(height: 10),
+                  Text(
+                    'Register to continue!',
+                    style: TextStyle(
+                      fontSize: 18,
+                      // fontWeight: FontWeight.bold,
                     ),
                   ),
-                ),
+                  SizedBox(height: 40),
 
-                // Toggle Password Visibility
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      TextButton(
-                        onPressed: _togglePassowrdView,
-                        style: ButtonStyle(
-                          padding: MaterialStateProperty.all(EdgeInsets.all(0)),
-                        ),
-                        child: Row(
-                          children: [
-                            Text('  '),
-                            _isHidden
-                                ? Icon(Icons.visibility_off)
-                                : Icon(Icons.visibility),
-                            Text('  Password  ')
-                          ],
-                        ),
-                      ),
+                  // First Name Textfield
+                  AppTextField(
+                    controller: _firstNameController,
+                    hintText: 'First Name',
+                    isPassword: false,
+                    keyboardType: TextInputType.name,
+                    textCapitalization: TextCapitalization.words,
+                    textInputAction: TextInputAction.next,
+                    prefixIcon: Icon(
+                      Icons.person,
+                      color: AppColors.cBackground,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+
+                  // Last Name Textfield
+                  AppTextField(
+                    controller: _lastNameController,
+                    hintText: 'Last Name',
+                    isPassword: false,
+                    keyboardType: TextInputType.name,
+                    textCapitalization: TextCapitalization.words,
+                    textInputAction: TextInputAction.next,
+                    prefixIcon: Icon(
+                      Icons.person,
+                      color: AppColors.cBackground,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+
+                  // Email Textfield
+                  AppTextField(
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(
+                          RegExp("[A-Za-z0-9#+-.@]*"))
                     ],
+                    controller: _emailController,
+                    hintText: 'Email',
+                    isPassword: false,
+                    keyboardType: TextInputType.emailAddress,
+                    textInputAction: TextInputAction.next,
+                    textCapitalization: TextCapitalization.none,
+                    prefixIcon: Icon(
+                      Icons.email,
+                      color: AppColors.cBackground,
+                    ),
                   ),
-                ),
-                SizedBox(height: 20),
+                  SizedBox(height: 10),
 
-                // Login Button
-                AppButton(
-                  text: 'Sign Up',
-                  onPressed: signUp,
-                ),
-                SizedBox(height: 20),
+                  // Phone Textfield
+                  AppTextField(
+                    length: 10,
+                    controller: _phoneController,
+                    hintText: 'Phone',
+                    isPassword: false,
+                    keyboardType: TextInputType.number,
+                    textInputAction: TextInputAction.next,
+                    textCapitalization: TextCapitalization.none,
+                    prefixIcon: Icon(
+                      Icons.phone,
+                      color: AppColors.cBackground,
+                    ),
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  ),
+                  SizedBox(height: 10),
 
-                SizedBox(
-                  width: Get.width * 0.8,
-                  child: RichText(
-                    textAlign: TextAlign.center,
-                    text: const TextSpan(
+                  // Password Textfield
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    child: TextField(
+                      controller: _passwordController,
+                      obscureText: _isHidden,
+                      keyboardType: TextInputType.visiblePassword,
+                      textInputAction: TextInputAction.done,
+                      decoration: InputDecoration(
+                        hintText: 'Password',
+                        hintStyle: TextStyle(color: AppColors.cPrimary),
+                        prefixIcon: Icon(
+                          Icons.lock,
+                          color: AppColors.cBackground,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: AppColors.cBackground,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: AppColors.cPrimary,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  // ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    child: TextField(
+                      controller: _confirmPasswordController,
+                      obscureText: _isHidden,
+                      keyboardType: TextInputType.visiblePassword,
+                      textInputAction: TextInputAction.done,
+                      decoration: InputDecoration(
+                        hintText: 'Confirm Password',
+                        hintStyle: TextStyle(color: AppColors.cPrimary),
+                        prefixIcon: Icon(
+                          Icons.lock,
+                          color: AppColors.cBackground,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: AppColors.cBackground,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: AppColors.cPrimary,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  // Toggle Password Visibility
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        TextSpan(
-                            text: 'By signing up, you agree our ',
-                            style: TextStyle(
-                                color: Color(0xff262628), fontSize: 12)),
-                        TextSpan(
-                          text: 'terms, data policy and cookies policy',
-                          style: TextStyle(
-                              color: Color(0xff262628),
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold),
+                        TextButton(
+                          onPressed: _togglePassowrdView,
+                          style: ButtonStyle(
+                            padding:
+                                MaterialStateProperty.all(EdgeInsets.all(0)),
+                          ),
+                          child: Row(
+                            children: [
+                              Text('  '),
+                              _isHidden
+                                  ? Icon(Icons.visibility_off)
+                                  : Icon(Icons.visibility),
+                              Text('  Password  ')
+                            ],
+                          ),
                         ),
                       ],
                     ),
                   ),
-                ),
-                SizedBox(height: 30),
+                  SizedBox(height: 20),
 
-                // Register Button
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Already a member? ',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400,
+                  // Login Button
+                  AppButton(
+                    text: 'Sign Up',
+                    onPressed: signUp,
+                  ),
+                  SizedBox(height: 20),
+
+                  SizedBox(
+                    width: Get.width * 0.8,
+                    child: RichText(
+                      textAlign: TextAlign.center,
+                      text: const TextSpan(
+                        children: [
+                          TextSpan(
+                              text: 'By signing up, you agree our ',
+                              style: TextStyle(
+                                  color: Color(0xff262628), fontSize: 12)),
+                          TextSpan(
+                            text: 'terms, data policy and cookies policy',
+                            style: TextStyle(
+                                color: Color(0xff262628),
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
                       ),
                     ),
-                    GestureDetector(
-                      onTap: widget.showLoginPage,
-                      child: Text(
-                        'Sign In',
+                  ),
+                  SizedBox(height: 30),
+
+                  // Register Button
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Already a member? ',
                         style: TextStyle(
-                          color: AppColors.cPrimaryAccent,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 18,
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20),
-              ],
+                      GestureDetector(
+                        onTap: widget.showLoginPage,
+                        child: Text(
+                          'Sign In',
+                          style: TextStyle(
+                            color: AppColors.cPrimaryAccent,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 18,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                ],
+              ),
             ),
           ),
         ),
@@ -305,11 +332,10 @@ class _RegisterPageState extends State<RegisterPage> {
     if (isValidEmail() && passwordMatch() && isValidPhone()) {
       try {
         // Create user
-        UserCredential userCredential =
-            await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: _emailController.text.trim(),
-          password: _passwordController.text.trim(),
-        );
+        UserCredential userCredential = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+                email: _emailController.text.trim(),
+                password: _passwordController.text.trim());
 
         // Update user display name & email
         userCredential.user!.updateDisplayName('$firstName $lastName');

@@ -286,7 +286,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
       'description': _eventDescriptionController.text,
       'joined': [FirebaseAuth.instance.currentUser!.uid],
       'event_id': '',
-      'inviter': [FirebaseAuth.instance.currentUser!.uid],
+      'host': FirebaseAuth.instance.currentUser!.uid,
       'event_link': '',
     };
 

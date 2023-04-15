@@ -50,11 +50,15 @@ class _ExploreScreenState extends State<ExploreScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               ListTile(
+                                isThreeLine: false,
                                 title: GetEventName(eventId: eventIds[index]),
                                 subtitle:
                                     GetEventLocation(eventId: eventIds[index]),
-                                trailing:
+                                trailing: Column(
+                                  children: [
                                     GetEventDate(eventId: eventIds[index]),
+                                  ],
+                                ),
                               ),
                               Container(
                                 padding:
@@ -69,7 +73,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                       ),
                                     ),
                                     GetEventDescription(
-                                        eventId: eventIds[index]),
+                                      eventId: eventIds[index],
+                                    ),
                                   ],
                                 ),
                               ),
@@ -98,9 +103,6 @@ class _ExploreScreenState extends State<ExploreScreen> {
         .then((eventsSnapshot) {
       for (var event in eventsSnapshot.docs) {
         {
-          if (kDebugMode) {
-            print(event.reference.id);
-          }
           eventIds.add(event.reference.id);
         }
       }

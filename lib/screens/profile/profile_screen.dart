@@ -6,6 +6,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../utils/app_snackbar.dart';
+
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
@@ -14,18 +16,36 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  // if email is verified
+  bool _emailVerified = false;
+
+  void _reloadPage() {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
+    verifyEmail();
     return SafeArea(
-      child: FutureBuilder(
-        future: getUserDetails(),
-        builder: ((context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return userProfileWithDetails(context, snapshot);
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
-        }),
+      child: RefreshIndicator(
+        onRefresh: () async {
+          _reloadPage();
+        },
+        child: ListView(
+          children: [
+            FutureBuilder(
+              future: getUserDetails(),
+              builder: ((context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  return userProfileWithDetails(context, snapshot);
+                } else {
+                  return const Center(child: CircularProgressIndicator());
+                }
+              }),
+            ),
+            Container(),
+          ],
+        ),
       ),
     );
   }
@@ -33,7 +53,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget userProfileWithDetails(context, snapshot) {
     final user = snapshot.data;
     // print(user);
-
     // Temporary Profile Image
     String profileImagePath = 'assets/icons/blank_profile_picture.png';
     // Image from Firebase
@@ -42,174 +61,224 @@ class _ProfileScreenState extends State<ProfileScreen> {
       print(profileImageURL);
     }
 
-    return SafeArea(
-      child: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Profile Image
-            Center(
-              child: Container(
-                margin: const EdgeInsets.only(top: 20),
-                width: 150,
-                height: 150,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(100),
-                  child: profileImageURL == 'null'
-                      ? Image.asset(
-                          profileImagePath,
-                          fit: BoxFit.cover,
-                        )
-                      : CachedNetworkImage(
-                          imageUrl: profileImageURL,
-                          fit: BoxFit.cover,
-                          errorWidget: (context, url, error) => Icon(
-                            Icons.warning_rounded,
-                            size: 50,
-                            color: AppColors.cError,
-                          ),
-                          progressIndicatorBuilder:
-                              (context, url, downloadProgress) =>
-                                  CircularProgressIndicator(
-                            value: downloadProgress.progress,
-                          ),
-                        ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(8),
+    return Semantics(
+      label: 'Profile Screen',
+      child: SafeArea(
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Profile Image
+              Center(
                 child: Container(
-                  color: AppColors.mPrimaryAccent.withOpacity(0.5),
-                  child: ListTile(
-                    leading: const Icon(
-                      Icons.account_circle_rounded,
-                      color: Colors.black,
-                      size: 40,
-                    ),
-                    // Current User Display Name
-                    title: Text(
-                      user.displayName!,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    // Current User Email
-                    subtitle: Text(
-                      user.email!,
-                      style: const TextStyle(fontSize: 16),
-                    ),
+                  margin: const EdgeInsets.only(top: 20),
+                  width: 150,
+                  height: 150,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(100),
+                    child: profileImageURL == 'null'
+                        ? Image.asset(
+                            profileImagePath,
+                            fit: BoxFit.cover,
+                          )
+                        : CachedNetworkImage(
+                            imageUrl: profileImageURL,
+                            fit: BoxFit.cover,
+                            errorWidget: (context, url, error) => Icon(
+                              Icons.warning_rounded,
+                              size: 50,
+                              color: AppColors.cError,
+                            ),
+                            progressIndicatorBuilder:
+                                (context, url, downloadProgress) =>
+                                    CircularProgressIndicator(
+                              value: downloadProgress.progress,
+                            ),
+                          ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(height: 10),
+              const SizedBox(height: 20),
 
-            GestureDetector(
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const UpdateProfile(),
-                ),
-              ),
-              child: Padding(
+              Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
                   child: Container(
-                    width: double.infinity,
-                    color: AppColors.cPrimaryAccent.withOpacity(0.5),
-                    child: const ListTile(
-                      title: Text(
-                        'Edit Profile',
-                        style: TextStyle(fontSize: 20),
+                    color: AppColors.mPrimaryAccent.withOpacity(0.5),
+                    child: ListTile(
+                      leading: const Icon(
+                        Icons.account_circle_rounded,
+                        color: Colors.black,
+                        size: 40,
                       ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-
-            GestureDetector(
-              onTap: () async {
-                String url =
-                    "https://docs.google.com/forms/d/e/1FAIpQLScAh2iwNrNl-tepxPKDjMqfVWHddod5WGcHXKv6-5kl-pc4bg/viewform";
-                _launchUrl(url);
-              },
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Container(
-                    width: double.infinity,
-                    color: AppColors.cPrimaryAccent.withOpacity(0.5),
-                    child: const ListTile(
+                      // Current User Display Name
                       title: Text(
-                        'Feedback',
-                        style: TextStyle(fontSize: 20),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Container(
-                  width: double.infinity,
-                  color: AppColors.cPrimaryAccent.withOpacity(0.5),
-                  child: const ListTile(
-                    title: Text(
-                      'Request to Delete Account',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-
-            GestureDetector(
-              onTap: signOut,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Container(
-                    width: double.infinity,
-                    color: AppColors.cError.withOpacity(0.69),
-                    child: const ListTile(
-                      trailing: Icon(
-                        Icons.logout,
-                        color: Colors.white,
-                      ),
-                      title: Text(
-                        'Sign Out',
-                        style: TextStyle(
+                        user.displayName!,
+                        style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                        ),
+                      ),
+                      // Current User Email
+                      subtitle: Text(
+                        user.email!,
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+
+              GestureDetector(
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const UpdateProfile(),
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Container(
+                      width: double.infinity,
+                      color: AppColors.cPrimaryAccent.withOpacity(0.5),
+                      child: const ListTile(
+                        title: Text(
+                          'Edit Profile',
+                          style: TextStyle(fontSize: 20),
                         ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(height: 20),
-          ],
+              const SizedBox(height: 10),
+
+              GestureDetector(
+                onTap: () async {
+                  String url =
+                      "https://docs.google.com/forms/d/e/1FAIpQLScAh2iwNrNl-tepxPKDjMqfVWHddod5WGcHXKv6-5kl-pc4bg/viewform";
+                  _launchUrl(url);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Container(
+                      width: double.infinity,
+                      color: AppColors.cPrimaryAccent.withOpacity(0.5),
+                      child: const ListTile(
+                        title: Text(
+                          'Feedback',
+                          style: TextStyle(fontSize: 20),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Container(
+                    width: double.infinity,
+                    color: AppColors.cPrimaryAccent.withOpacity(0.5),
+                    child: const ListTile(
+                      title: Text(
+                        'Request to Delete Account',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+
+              IgnorePointer(
+                ignoring: _emailVerified,
+                child: GestureDetector(
+                  onTap: () async {
+                    if (_emailVerified) {
+                      // Show that email is verified already!
+                      AppSnackbar.showSuccessSnackBar(
+                          context, 'Email Already Verified!');
+                    } else {
+                      User? user = FirebaseAuth.instance.currentUser;
+                      await user?.sendEmailVerification();
+                      // Show that email verification link has been sent to the provided email address
+                      AppSnackbar.showSuccessSnackBar(context,
+                          'Please check your Email for the verification link.');
+                    }
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: _emailVerified
+                          ? Container(
+                              width: double.infinity,
+                              color: AppColors.cSuccess.withOpacity(0.5),
+                              child: const ListTile(
+                                title: Text(
+                                  'Email Verified!',
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                              ),
+                            )
+                          : Container(
+                              width: double.infinity,
+                              color: AppColors.cError.withOpacity(0.5),
+                              child: const ListTile(
+                                title: Text(
+                                  'Verify Email',
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                              ),
+                            ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+
+              GestureDetector(
+                onTap: signOut,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Container(
+                      width: double.infinity,
+                      color: AppColors.cError,
+                      child: const ListTile(
+                        trailing: Icon(
+                          Icons.logout,
+                          color: Colors.white,
+                        ),
+                        title: Text(
+                          'Sign Out',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+            ],
+          ),
         ),
       ),
     );
@@ -243,5 +312,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
   // Sign Out
   Future signOut() async {
     await FirebaseAuth.instance.signOut();
+  }
+
+  // Check if email is verified
+  Future verifyEmail() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user!.emailVerified) {
+      // The user has verified their email
+      _emailVerified = true;
+    } else {
+      // The user has not verified their email
+      _emailVerified = false;
+    }
   }
 }

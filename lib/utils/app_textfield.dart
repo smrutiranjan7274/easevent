@@ -1,5 +1,8 @@
-import 'package:easevent/utils/app_color.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+import 'package:easevent/utils/app_color.dart';
 
 class AppTextField extends StatelessWidget {
   final String hintText;
@@ -15,28 +18,35 @@ class AppTextField extends StatelessWidget {
   final int? maxLines;
   final bool? enabled;
 
+  final int? length;
+  final List<TextInputFormatter>? inputFormatters;
+
   // InkWell? suffix;
 
   const AppTextField({
-    super.key,
+    Key? key,
     required this.hintText,
     required this.isPassword,
-    required this.textCapitalization,
     this.controller,
-    this.prefixIcon,
     this.suffixIcon,
+    this.prefixIcon,
     this.keyboardType,
+    required this.textCapitalization,
     this.textInputAction,
     this.minLines,
     this.maxLines,
     this.enabled,
-  });
+    this.inputFormatters,
+    this.length,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25.0),
       child: TextField(
+        maxLength: length,
+        inputFormatters: inputFormatters,
         enabled: enabled,
         minLines: minLines,
         maxLines: maxLines,
@@ -46,13 +56,13 @@ class AppTextField extends StatelessWidget {
         textCapitalization: textCapitalization,
         textInputAction: textInputAction,
         decoration: InputDecoration(
-          label: Text(
-            hintText,
-            style: TextStyle(color: AppColors.cPrimary),
-          ),
+          counterText: '',
           prefixIcon: prefixIcon,
           suffixIcon: suffixIcon,
-          // hintText: hintText,
+          hintText: hintText,
+          hintStyle: const TextStyle(
+            color: Color(0xFF3F37C9),
+          ),
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(
               color: AppColors.cBackground,

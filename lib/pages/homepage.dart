@@ -23,41 +23,44 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: NavigationBarTheme(
-        data: NavigationBarThemeData(
-          labelTextStyle: MaterialStateProperty.all(
-            const TextStyle(fontWeight: FontWeight.bold),
+    return Semantics(
+      label: 'Home Page',
+      child: Scaffold(
+        bottomNavigationBar: NavigationBarTheme(
+          data: NavigationBarThemeData(
+            labelTextStyle: MaterialStateProperty.all(
+              const TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+          child: NavigationBar(
+            labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+            selectedIndex: _selectedIndex,
+            onDestinationSelected: (index) {
+              setState(() {
+                _selectedIndex = index;
+              });
+            },
+            destinations: const [
+              NavigationDestination(
+                icon: Icon(Icons.explore_outlined),
+                selectedIcon: Icon(Icons.explore_rounded),
+                label: 'Explore',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.event_outlined),
+                selectedIcon: Icon(Icons.event_rounded),
+                label: 'Events',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.account_circle_outlined),
+                selectedIcon: Icon(Icons.account_circle_rounded),
+                label: 'Profile',
+              ),
+            ],
           ),
         ),
-        child: NavigationBar(
-          labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
-          selectedIndex: _selectedIndex,
-          onDestinationSelected: (index) {
-            setState(() {
-              _selectedIndex = index;
-            });
-          },
-          destinations: const [
-            NavigationDestination(
-              icon: Icon(Icons.explore_outlined),
-              selectedIcon: Icon(Icons.explore_rounded),
-              label: 'Explore',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.event_outlined),
-              selectedIcon: Icon(Icons.event_rounded),
-              label: 'Events',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.account_circle_outlined),
-              selectedIcon: Icon(Icons.account_circle_rounded),
-              label: 'Profile',
-            ),
-          ],
-        ),
+        body: screens[_selectedIndex],
       ),
-      body: screens[_selectedIndex],
     );
   }
 }

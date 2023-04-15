@@ -120,7 +120,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       // Current User Display Name
                       title: Text(
-                        user.displayName!,
+                        user.displayName.toString(),
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -128,7 +128,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       // Current User Email
                       subtitle: Text(
-                        user.email!,
+                        user.email.toString(),
                         style: const TextStyle(fontSize: 16),
                       ),
                     ),

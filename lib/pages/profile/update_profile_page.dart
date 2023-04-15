@@ -33,8 +33,10 @@ class _UpdateProfileState extends State<UpdateProfile> {
 
   @override
   Widget build(BuildContext context) {
-    _firstNameController.text = user.displayName!.split(' ')[0];
-    _lastNameController.text = user.displayName!.split(' ')[1];
+    String firstName = user.displayName!.split(' ')[0];
+    String lastName = user.displayName!.split(' ')[1];
+    _firstNameController.text = firstName;
+    _lastNameController.text = lastName;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -84,7 +86,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                 AppTextField(
                   hintText: "First Name",
                   isPassword: false,
-                  textCapitalization: TextCapitalization.words,
+                  textCapitalization: TextCapitalization.sentences,
                   controller: _firstNameController,
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.name,
@@ -95,7 +97,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                 AppTextField(
                   hintText: "Last Name",
                   isPassword: false,
-                  textCapitalization: TextCapitalization.words,
+                  textCapitalization: TextCapitalization.sentences,
                   controller: _lastNameController,
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.name,

@@ -1,5 +1,5 @@
 import 'package:easevent/pages/auth_pages/login_page.dart';
-import 'package:easevent/pages/auth_pages/register_page.dart';
+import 'package:easevent/pages/auth_pages/phone.dart';
 import 'package:flutter/material.dart';
 
 class AuthPage extends StatefulWidget {
@@ -24,7 +24,7 @@ class _AuthPageState extends State<AuthPage> {
     if (showLoginPage) {
       return LoginPage(showRegisterPage: toggleScreens);
     } else {
-      return RegisterPage(showLoginPage: toggleScreens);
+      return RegisterWithPhone(showLoginPage: toggleScreens);
     }
   }
 }

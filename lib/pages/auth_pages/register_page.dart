@@ -1,21 +1,28 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 // ignore_for_file: prefer_const_constructors, depend_on_referenced_packages
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:easevent/utils/app_color.dart';
-import 'package:easevent/utils/app_button.dart';
-import 'package:easevent/utils/app_textfield.dart';
-import 'package:easevent/utils/app_snackbar.dart';
+import 'package:easevent/auth/main_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
+import 'package:easevent/utils/app_snackbar.dart';
+
+import '../../utils/app_button.dart';
+import '../../utils/app_color.dart';
+import '../../utils/app_textfield.dart';
+
 class RegisterPage extends StatefulWidget {
   final VoidCallback showLoginPage;
+  final UserCredential userCredentials;
   const RegisterPage({
-    super.key,
+    Key? key,
+    required this.userCredentials,
     required this.showLoginPage,
-  });
+  }) : super(key: key);
 
   @override
   State<RegisterPage> createState() => _RegisterPageState();
@@ -28,7 +35,11 @@ class _RegisterPageState extends State<RegisterPage> {
   final _confirmPasswordController = TextEditingController();
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
-  // final _phoneController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   // To show/hide password
   bool _isHidden = true;
@@ -138,23 +149,6 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                   SizedBox(height: 10),
-
-                  // // Phone Textfield
-                  // AppTextField(
-                  //   length: 10,
-                  //   controller: _phoneController,
-                  //   hintText: 'Phone',
-                  //   isPassword: false,
-                  //   keyboardType: TextInputType.number,
-                  //   textInputAction: TextInputAction.next,
-                  //   textCapitalization: TextCapitalization.none,
-                  //   prefixIcon: Icon(
-                  //     Icons.phone,
-                  //     color: AppColors.cBackground,
-                  //   ),
-                  //   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                  // ),
-                  // SizedBox(height: 10),
 
                   // Password Textfield
                   Padding(
@@ -278,32 +272,6 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                   SizedBox(height: 30),
-
-                  // Register Button
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Already a member? ',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 18,
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: widget.showLoginPage,
-                        child: Text(
-                          'Sign In',
-                          style: TextStyle(
-                            color: AppColors.cPrimaryAccent,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 20),
                 ],
               ),
             ),
@@ -331,53 +299,59 @@ class _RegisterPageState extends State<RegisterPage> {
     if (isValidEmail() && passwordMatch()) {
       try {
         // Create user
-        UserCredential userCredential = await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(
-                email: _emailController.text.trim(),
-                password: _passwordController.text.trim());
+        UserCredential userCredential = widget.userCredentials;
 
         // Update user display name & email
         userCredential.user!.updateDisplayName('$firstName $lastName');
-        userCredential.user!.updateEmail(email);
-
         String userUID = userCredential.user!.uid;
+        String phoneNumber = userCredential.user!.phoneNumber.toString();
+        // userCredential.user!.updateEmail(email);
 
         // After user created, add user details to firestore
-        addUserDetails(userUID, firstName, lastName, email);
+        addUserDetails(userUID, firstName, lastName, email, phoneNumber);
+
+        AuthCredential credential = EmailAuthProvider.credential(
+          email: email,
+          password: _confirmPasswordController.text.trim().toString(),
+        );
+        userCredential.user!.linkWithCredential(credential).then((value) {
+          var user = value.user;
+          if (kDebugMode) {
+            print("Account linking successful for ${user!.email}");
+          }
+        }).catchError((onError) {
+          if (kDebugMode) {
+            print("Error linking account: $onError");
+          }
+        });
       } on FirebaseAuthException catch (e) {
         if (e.code == 'weak-password') {
           AppSnackbar.showErrorSnackBar(
               context, 'The password provided is too weak or short !');
-          //ignore:avoid_print
-          // print('The password provided is too weak.');
         } else if (e.code == 'email-already-in-use') {
           AppSnackbar.showErrorSnackBar(
               context, 'An account already exists for that email.');
-          //ignore:avoid_print
-          //print('An account already exists for that email.');
         }
       } catch (e) {
         AppSnackbar.showErrorSnackBar(
             context, 'Something went wrong! Please try again later.');
-      } finally {
-        // Sign Up Success and Sign Out then Navigate to Login Page
-        await FirebaseAuth.instance.signOut();
       }
     }
     // Pop loading circle
     if (!mounted) return;
-    Navigator.of(context).pop();
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => MainPage()));
   }
 
-  Future addUserDetails(
-      String userUID, String firstName, String lastName, String email) async {
+  Future addUserDetails(String userUID, String firstName, String lastName,
+      String email, String phoneNumber) async {
     await FirebaseFirestore.instance.collection('users').doc(userUID).set(
       {
         'uid': userUID,
         'first name': firstName,
         'last name': lastName,
         'email': email,
-        'phone number': '',
+        'phone number': phoneNumber,
         'photoURL': '',
       },
     );

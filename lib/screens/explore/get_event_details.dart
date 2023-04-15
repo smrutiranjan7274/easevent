@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easevent/utils/app_color.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 // Get Event Name

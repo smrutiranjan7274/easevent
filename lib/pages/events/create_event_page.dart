@@ -306,8 +306,8 @@ class _CreateEventPageState extends State<CreateEventPage> {
       if (kDebugMode) {
         print(e);
       }
-
-      return AppSnackbar.showErrorSnackBar(context, 'Error creating event!');
+      return AppSnackbar.showErrorSnackBar(
+          context, 'Error creating event! Please try again later.');
     }
   }
 }

@@ -28,7 +28,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final _confirmPasswordController = TextEditingController();
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
-  final _phoneController = TextEditingController();
+  // final _phoneController = TextEditingController();
 
   // To show/hide password
   bool _isHidden = true;
@@ -41,7 +41,7 @@ class _RegisterPageState extends State<RegisterPage> {
     _confirmPasswordController.dispose();
     _firstNameController.dispose();
     _lastNameController.dispose();
-    _phoneController.dispose();
+    // _phoneController.dispose();
     super.dispose();
   }
 
@@ -139,22 +139,22 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   SizedBox(height: 10),
 
-                  // Phone Textfield
-                  AppTextField(
-                    length: 10,
-                    controller: _phoneController,
-                    hintText: 'Phone',
-                    isPassword: false,
-                    keyboardType: TextInputType.number,
-                    textInputAction: TextInputAction.next,
-                    textCapitalization: TextCapitalization.none,
-                    prefixIcon: Icon(
-                      Icons.phone,
-                      color: AppColors.cBackground,
-                    ),
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                  ),
-                  SizedBox(height: 10),
+                  // // Phone Textfield
+                  // AppTextField(
+                  //   length: 10,
+                  //   controller: _phoneController,
+                  //   hintText: 'Phone',
+                  //   isPassword: false,
+                  //   keyboardType: TextInputType.number,
+                  //   textInputAction: TextInputAction.next,
+                  //   textCapitalization: TextCapitalization.none,
+                  //   prefixIcon: Icon(
+                  //     Icons.phone,
+                  //     color: AppColors.cBackground,
+                  //   ),
+                  //   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  // ),
+                  // SizedBox(height: 10),
 
                   // Password Textfield
                   Padding(
@@ -319,7 +319,6 @@ class _RegisterPageState extends State<RegisterPage> {
     final String firstName = _firstNameController.text.trim();
     final String lastName = _lastNameController.text.trim();
     final String email = _emailController.text.trim();
-    final String phoneNumber = _phoneController.text.trim();
 
     // Show loading circle
     showDialog(
@@ -329,7 +328,7 @@ class _RegisterPageState extends State<RegisterPage> {
       },
     );
 
-    if (isValidEmail() && passwordMatch() && isValidPhone()) {
+    if (isValidEmail() && passwordMatch()) {
       try {
         // Create user
         UserCredential userCredential = await FirebaseAuth.instance
@@ -344,7 +343,7 @@ class _RegisterPageState extends State<RegisterPage> {
         String userUID = userCredential.user!.uid;
 
         // After user created, add user details to firestore
-        addUserDetails(userUID, firstName, lastName, email, phoneNumber);
+        addUserDetails(userUID, firstName, lastName, email);
       } on FirebaseAuthException catch (e) {
         if (e.code == 'weak-password') {
           AppSnackbar.showErrorSnackBar(
@@ -360,26 +359,25 @@ class _RegisterPageState extends State<RegisterPage> {
       } catch (e) {
         AppSnackbar.showErrorSnackBar(
             context, 'Something went wrong! Please try again later.');
+      } finally {
+        // Sign Up Success and Sign Out then Navigate to Login Page
+        await FirebaseAuth.instance.signOut();
       }
     }
-
     // Pop loading circle
     if (!mounted) return;
     Navigator.of(context).pop();
-
-    // Sign Up Success and Sign Out then Navigate to Login Page
-    await FirebaseAuth.instance.signOut();
   }
 
-  Future addUserDetails(String userUID, String firstName, String lastName,
-      String email, String phoneNumber) async {
+  Future addUserDetails(
+      String userUID, String firstName, String lastName, String email) async {
     await FirebaseFirestore.instance.collection('users').doc(userUID).set(
       {
         'uid': userUID,
         'first name': firstName,
         'last name': lastName,
         'email': email,
-        'phone number': phoneNumber,
+        'phone number': '',
         'photoURL': '',
       },
     );
@@ -397,22 +395,6 @@ class _RegisterPageState extends State<RegisterPage> {
       return false;
     } else if (!emailValid) {
       AppSnackbar.showErrorSnackBar(context, 'Email is not valid !');
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-  bool isValidPhone() {
-    String phone = _phoneController.text.trim();
-    final bool phoneValid =
-        RegExp(r"^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$")
-            .hasMatch(phone);
-    if (_phoneController.text.trim().isEmpty) {
-      AppSnackbar.showErrorSnackBar(context, 'Phone number can not be empty !');
-      return false;
-    } else if (!phoneValid) {
-      AppSnackbar.showErrorSnackBar(context, 'Phone number is not valid !');
       return false;
     } else {
       return true;

@@ -7,7 +7,6 @@ import 'package:easevent/utils/app_color.dart';
 import 'package:easevent/utils/app_snackbar.dart';
 import 'package:easevent/utils/app_textfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -22,7 +21,6 @@ class _UpdateProfileState extends State<UpdateProfile> {
   final user = FirebaseAuth.instance.currentUser!;
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
-  final _emailController = TextEditingController();
 
   File _image = File('assets/icons/blank_profile_picture.png');
 
@@ -30,7 +28,6 @@ class _UpdateProfileState extends State<UpdateProfile> {
   void dispose() {
     _firstNameController.dispose();
     _lastNameController.dispose();
-    _emailController.dispose();
     super.dispose();
   }
 
@@ -38,7 +35,6 @@ class _UpdateProfileState extends State<UpdateProfile> {
   Widget build(BuildContext context) {
     _firstNameController.text = user.displayName!.split(' ')[0];
     _lastNameController.text = user.displayName!.split(' ')[1];
-    _emailController.text = user.email!;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -50,26 +46,39 @@ class _UpdateProfileState extends State<UpdateProfile> {
           child: Form(
             child: Column(
               children: [
+                const SizedBox(height: 10),
+
                 ListTile(
                   title: GestureDetector(
                     onTap: () {
                       _showPicker(context);
                     },
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 10),
-                        Text(
-                          'Change Profile Picture',
-                          style: TextStyle(
-                            color: AppColors.mPrimary,
-                            fontSize: 16,
-                          ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Container(
+                        padding: const EdgeInsets.all(15),
+                        decoration: BoxDecoration(
+                          color: AppColors.mPrimaryAccent[200],
+                          borderRadius: BorderRadius.circular(5),
                         ),
-                      ],
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: const [
+                            Text(
+                              'Change Profile Picture',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Icon(Icons.edit),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
 
                 // First Name
                 AppTextField(
@@ -90,17 +99,6 @@ class _UpdateProfileState extends State<UpdateProfile> {
                   controller: _lastNameController,
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.name,
-                ),
-                const SizedBox(height: 20),
-
-                // Email
-                AppTextField(
-                  hintText: "Email",
-                  isPassword: false,
-                  textCapitalization: TextCapitalization.none,
-                  controller: _emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  textInputAction: TextInputAction.done,
                 ),
                 const SizedBox(height: 20),
 
@@ -133,15 +131,12 @@ class _UpdateProfileState extends State<UpdateProfile> {
       },
     );
 
-    // TODO: Validate all fields
-
     try {
       // Upload Profile Image to Firebase Storage
       String profileImageURL =
           await StorageRepo().uploadFile(_image, 'user/profile/${user.uid}');
       final uid = user.uid;
       // Update User Profile in Firebase Fireauth
-      user.updateEmail(_emailController.text.trim());
       user.updateDisplayName(
           '${_firstNameController.text.trim()} ${_lastNameController.text.trim()}');
       user.updatePhotoURL(profileImageURL);
@@ -151,34 +146,15 @@ class _UpdateProfileState extends State<UpdateProfile> {
         {
           'first name': _firstNameController.text.trim(),
           'last name': _lastNameController.text.trim(),
-          'email': _emailController.text.trim(),
           'photoURL': user.photoURL,
         },
       );
-      // Show success snackbar
-      // Pop loading circle
       if (!mounted) return;
-      Navigator.of(context).pop();
+      // Show success snackbar
       return AppSnackbar.showSuccessSnackBar(
           context, 'Profile Updated Successfully!');
-    } on FirebaseAuthException catch (e) {
-      // print(e);
-      if (e.code == 'requires-recent-login') {
-        // Pop loading circle
-        if (!mounted) return;
-        Navigator.of(context).pop();
-        return AppSnackbar.showErrorSnackBar(
-            context, 'Please re-login to update your profile');
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
-      // Pop loading circle
-      if (!mounted) return;
+    } finally {
       Navigator.of(context).pop();
-      return AppSnackbar.showErrorSnackBar(
-          context, 'Error updating your profile. Please try again later!');
     }
   }
 
@@ -223,26 +199,35 @@ class _UpdateProfileState extends State<UpdateProfile> {
   }
 
   Future _imgFromCamera() async {
-    await ImagePicker()
-        .pickImage(source: ImageSource.camera, imageQuality: 50)
-        .then(
-          (image) => setState(
-            () {
-              _image = File(image!.path);
-            },
-          ),
-        );
+    try {
+      await ImagePicker()
+          .pickImage(source: ImageSource.camera, imageQuality: 50)
+          .then(
+            (image) => setState(
+              () {
+                _image = File(image!.path);
+              },
+            ),
+          );
+    } catch (e) {
+      return AppSnackbar.showErrorSnackBar(context, "Please capture an image!");
+    }
   }
 
   Future _imgFromGallery() async {
-    await ImagePicker()
-        .pickImage(source: ImageSource.gallery, imageQuality: 50)
-        .then(
-          (image) => setState(
-            () {
-              _image = File(image!.path);
-            },
-          ),
-        );
+    try {
+      await ImagePicker()
+          .pickImage(source: ImageSource.gallery, imageQuality: 50)
+          .then(
+            (image) => setState(
+              () {
+                _image = File(image!.path);
+              },
+            ),
+          );
+    } catch (e) {
+      return AppSnackbar.showErrorSnackBar(
+          context, "Please select a valid image!");
+    }
   }
 }

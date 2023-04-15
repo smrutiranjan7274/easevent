@@ -4,6 +4,7 @@ import 'package:easevent/utils/app_color.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../utils/app_snackbar.dart';
@@ -19,18 +20,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
   // if email is verified
   bool _emailVerified = false;
 
-  void _reloadPage() {
+  Future<void> reloadPage() async {
     setState(() {});
+    return await Future.delayed(const Duration(seconds: 1));
   }
 
   @override
   Widget build(BuildContext context) {
     verifyEmail();
     return SafeArea(
-      child: RefreshIndicator(
-        onRefresh: () async {
-          _reloadPage();
-        },
+      child: LiquidPullToRefresh(
+        showChildOpacityTransition: false,
+        onRefresh: reloadPage,
+        height: 100,
+        animSpeedFactor: 3,
+        springAnimationDurationInMilliseconds: 500,
         child: ListView(
           children: [
             FutureBuilder(

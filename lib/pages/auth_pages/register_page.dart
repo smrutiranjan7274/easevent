@@ -298,40 +298,18 @@ class _RegisterPageState extends State<RegisterPage> {
 
     if (isValidEmail() && passwordMatch()) {
       try {
-        // Create user
         UserCredential userCredential = widget.userCredentials;
 
         String userUID = userCredential.user!.uid;
         String phoneNumber = userCredential.user!.phoneNumber.toString();
 
+        await linkPhoneWithCredentials(email, userCredential);
+
         // Update user display name & email
         userCredential.user!.updateDisplayName('$firstName $lastName');
 
         // After user created, add user details to firestore
-        addUserDetails(userUID, firstName, lastName, email, phoneNumber);
-
-        try {
-          AuthCredential credential = EmailAuthProvider.credential(
-            email: email,
-            password: _confirmPasswordController.text.trim().toString(),
-          );
-
-          userCredential.user!.linkWithCredential(credential).then((value) {
-            var user = value.user;
-            if (kDebugMode) {
-              print("Account linking successful for ${user!.email}");
-            }
-          }).catchError((onError) {
-            if (kDebugMode) {
-              print("Error linking account: $onError");
-            }
-          });
-        } on FirebaseAuthException catch (e) {
-          if (kDebugMode) {
-            print("Error: ${e.code}");
-          }
-          AppSnackbar.showErrorSnackBar(context, e.code);
-        }
+        await addUserDetails(userUID, firstName, lastName, email, phoneNumber);
 
         // Pop loading circle
         if (!mounted) return;
@@ -344,11 +322,50 @@ class _RegisterPageState extends State<RegisterPage> {
         } else if (e.code == 'email-already-in-use') {
           AppSnackbar.showErrorSnackBar(
               context, 'An account already exists for that email.');
+        } else if (e.code == 'provider-already-linked') {
+          AppSnackbar.showErrorSnackBar(context,
+              'The phone number is already registered with another account');
+        } else {
+          AppSnackbar.showErrorSnackBar(context, 'Something went wrong!');
         }
       } catch (e) {
         AppSnackbar.showErrorSnackBar(
             context, 'Something went wrong! Please try again later.');
       }
+    }
+
+    // Pop loading circle
+    if (!mounted) return;
+    Navigator.pop(context);
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => MainPage()));
+  }
+
+  Future linkPhoneWithCredentials(
+      String email, UserCredential userCredential) async {
+    try {
+      AuthCredential credential = EmailAuthProvider.credential(
+        email: email,
+        password: _confirmPasswordController.text.trim().toString(),
+      );
+
+      await userCredential.user!.linkWithCredential(credential).then((value) {
+        var user = value.user;
+        if (kDebugMode) {
+          print("Account linking successful for ${user!.email}");
+        }
+      }).catchError((e) {
+        if (kDebugMode) {
+          print("Error linking account: ${e.message}");
+        }
+        throw FirebaseAuthException(
+            code: 'provider-already-linked', message: '${e.message}');
+      });
+    } on FirebaseAuthException catch (e) {
+      if (kDebugMode) {
+        print("Error: ${e.code}");
+      }
+      throw FirebaseAuthException(code: e.code, message: e.message);
     }
   }
 

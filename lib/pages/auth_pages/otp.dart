@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easevent/auth/main_page.dart';
 import 'package:easevent/pages/auth_pages/register_page.dart';
 import 'package:easevent/utils/app_snackbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -35,13 +37,15 @@ class _VerifyOtpState extends State<VerifyOtp> {
           color: Color.fromRGBO(30, 60, 87, 1),
           fontWeight: FontWeight.w600),
       decoration: BoxDecoration(
-        border: Border.all(color: const Color.fromRGBO(234, 239, 243, 1)),
+        border:
+            Border.all(color: const Color.fromRGBO(234, 239, 243, 1), width: 2),
         borderRadius: BorderRadius.circular(20),
       ),
     );
 
     final focusedPinTheme = defaultPinTheme.copyDecorationWith(
-      border: Border.all(color: const Color.fromRGBO(114, 178, 238, 1)),
+      border:
+          Border.all(color: const Color.fromRGBO(114, 178, 238, 1), width: 2),
       borderRadius: BorderRadius.circular(8),
     );
 
@@ -136,6 +140,15 @@ class _VerifyOtpState extends State<VerifyOtp> {
                   AppButton(
                       text: 'Verify OTP',
                       onPressed: () async {
+                        // Show loading circle
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          },
+                        );
+
                         if (otpCode.toString().length == 6) {
                           _isOtpVerified = await verifyOTP(otpCode!);
                         } else if (otpCode.toString().length < 6 ||
@@ -145,16 +158,29 @@ class _VerifyOtpState extends State<VerifyOtp> {
                         }
 
                         if (_isOtpVerified) {
-                          if (!mounted) return;
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => RegisterPage(
-                                userCredentials: userCredentials,
-                                showLoginPage: () {},
+                          String? userId =
+                              FirebaseAuth.instance.currentUser?.uid.toString();
+                          bool userExist = await doesDocumentExist(userId);
+                          if (userExist) {
+                            if (!mounted) return;
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const MainPage(),
                               ),
-                            ),
-                          );
+                            );
+                          } else {
+                            if (!mounted) return;
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => RegisterPage(
+                                  userCredentials: userCredentials,
+                                  showLoginPage: () {},
+                                ),
+                              ),
+                            );
+                          }
                         }
                       }),
                   const SizedBox(height: 20),
@@ -189,6 +215,12 @@ class _VerifyOtpState extends State<VerifyOtp> {
         ),
       ),
     );
+  }
+
+  Future<bool> doesDocumentExist(String? userId) async {
+    DocumentSnapshot snapshot =
+        await FirebaseFirestore.instance.collection('users').doc(userId).get();
+    return snapshot.exists;
   }
 
   Future<bool> verifyOTP(String userOtp) async {

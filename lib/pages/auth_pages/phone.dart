@@ -125,7 +125,7 @@ class _RegisterWithPhoneState extends State<RegisterWithPhone> {
                             controller: _phoneController,
                             keyboardType: TextInputType.phone,
                             autofillHints: const [
-                              AutofillHints.telephoneNumberDevice
+                              AutofillHints.telephoneNumberLocal
                             ],
                             decoration: InputDecoration(
                               hintText: 'Phone',

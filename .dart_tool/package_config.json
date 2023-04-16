@@ -140,6 +140,24 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "firebase_app_check",
+      "rootUri": "file:///C:/Users/srb/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_app_check-0.1.2+1",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "firebase_app_check_platform_interface",
+      "rootUri": "file:///C:/Users/srb/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_app_check_platform_interface-0.0.6",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "firebase_app_check_web",
+      "rootUri": "file:///C:/Users/srb/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_app_check_web-0.0.8",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
       "name": "firebase_auth",
       "rootUri": "file:///C:/Users/srb/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth-4.2.2",
       "packageUri": "lib/",
@@ -632,7 +650,7 @@
       "languageVersion": "2.18"
     }
   ],
-  "generated": "2023-04-15T22:28:56.689554Z",
+  "generated": "2023-04-16T17:05:29.199399Z",
   "generator": "pub",
   "generatorVersion": "2.19.6"
 }

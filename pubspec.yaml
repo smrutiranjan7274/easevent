@@ -53,6 +53,7 @@ dependencies:
   country_picker: ^2.0.20
   # for otp input
   pinput: ^2.2.31
+  firebase_app_check: ^0.1.2+1
 
 dev_dependencies:
   flutter_test:

@@ -123,7 +123,7 @@ class _VerifyOtpState extends State<VerifyOtp> {
                     length: 6,
                     pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
                     showCursor: true,
-                    onCompleted: (value) {
+                    onChanged: (value) {
                       if (kDebugMode) {
                         print(value);
                       }
@@ -136,9 +136,10 @@ class _VerifyOtpState extends State<VerifyOtp> {
                   AppButton(
                       text: 'Verify OTP',
                       onPressed: () async {
-                        if (otpCode != null) {
+                        if (otpCode.toString().length == 6) {
                           _isOtpVerified = await verifyOTP(otpCode!);
-                        } else {
+                        } else if (otpCode.toString().length < 6 ||
+                            otpCode == null) {
                           AppSnackbar.showErrorSnackBar(
                               context, 'Enter proper 6-digit code');
                         }
@@ -154,10 +155,6 @@ class _VerifyOtpState extends State<VerifyOtp> {
                               ),
                             ),
                           );
-                        } else {
-                          if (!mounted) return;
-                          AppSnackbar.showErrorSnackBar(
-                              context, "Could not verify OTP!");
                         }
                       }),
                   const SizedBox(height: 20),
@@ -195,13 +192,23 @@ class _VerifyOtpState extends State<VerifyOtp> {
   }
 
   Future<bool> verifyOTP(String userOtp) async {
-    var credentials = await _firebaseAuth.signInWithCredential(
-        PhoneAuthProvider.credential(
-            verificationId: widget.verificationId, smsCode: userOtp));
-    userCredentials = credentials;
-    if (kDebugMode) {
-      print(userCredentials.user!.uid.toString());
+    try {
+      var credentials = await _firebaseAuth.signInWithCredential(
+          PhoneAuthProvider.credential(
+              verificationId: widget.verificationId, smsCode: userOtp));
+      userCredentials = credentials;
+      if (kDebugMode) {
+        print(userCredentials.user!.uid.toString());
+      }
+      return credentials.user != null ? true : false;
+    } on FirebaseAuthException catch (e) {
+      if (kDebugMode) {
+        print(e.code);
+      }
+      if (e.code == 'invalid-verification-code') {
+        AppSnackbar.showErrorSnackBar(context, 'Invalid OTP!');
+      }
     }
-    return credentials.user != null ? true : false;
+    return false;
   }
 }

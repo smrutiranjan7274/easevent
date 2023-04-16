@@ -301,29 +301,42 @@ class _RegisterPageState extends State<RegisterPage> {
         // Create user
         UserCredential userCredential = widget.userCredentials;
 
-        // Update user display name & email
-        userCredential.user!.updateDisplayName('$firstName $lastName');
         String userUID = userCredential.user!.uid;
         String phoneNumber = userCredential.user!.phoneNumber.toString();
-        // userCredential.user!.updateEmail(email);
+
+        // Update user display name & email
+        userCredential.user!.updateDisplayName('$firstName $lastName');
 
         // After user created, add user details to firestore
         addUserDetails(userUID, firstName, lastName, email, phoneNumber);
 
-        AuthCredential credential = EmailAuthProvider.credential(
-          email: email,
-          password: _confirmPasswordController.text.trim().toString(),
-        );
-        userCredential.user!.linkWithCredential(credential).then((value) {
-          var user = value.user;
+        try {
+          AuthCredential credential = EmailAuthProvider.credential(
+            email: email,
+            password: _confirmPasswordController.text.trim().toString(),
+          );
+
+          userCredential.user!.linkWithCredential(credential).then((value) {
+            var user = value.user;
+            if (kDebugMode) {
+              print("Account linking successful for ${user!.email}");
+            }
+          }).catchError((onError) {
+            if (kDebugMode) {
+              print("Error linking account: $onError");
+            }
+          });
+        } on FirebaseAuthException catch (e) {
           if (kDebugMode) {
-            print("Account linking successful for ${user!.email}");
+            print("Error: ${e.code}");
           }
-        }).catchError((onError) {
-          if (kDebugMode) {
-            print("Error linking account: $onError");
-          }
-        });
+          AppSnackbar.showErrorSnackBar(context, e.code);
+        }
+
+        // Pop loading circle
+        if (!mounted) return;
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => MainPage()));
       } on FirebaseAuthException catch (e) {
         if (e.code == 'weak-password') {
           AppSnackbar.showErrorSnackBar(
@@ -337,10 +350,6 @@ class _RegisterPageState extends State<RegisterPage> {
             context, 'Something went wrong! Please try again later.');
       }
     }
-    // Pop loading circle
-    if (!mounted) return;
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => MainPage()));
   }
 
   Future addUserDetails(String userUID, String firstName, String lastName,

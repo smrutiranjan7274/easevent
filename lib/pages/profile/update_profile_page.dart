@@ -33,10 +33,12 @@ class _UpdateProfileState extends State<UpdateProfile> {
 
   @override
   Widget build(BuildContext context) {
-    String firstName = user.displayName!.split(' ')[0];
-    String lastName = user.displayName!.split(' ')[1];
-    _firstNameController.text = firstName;
-    _lastNameController.text = lastName;
+    String? firstName = user.displayName?.split(' ')[0].toString();
+    String? lastName = user.displayName?.split(' ')[1].toString();
+    _firstNameController.text =
+        firstName.toString() == "null" ? "" : firstName.toString();
+    _lastNameController.text =
+        lastName.toString() == "null" ? "" : lastName.toString();
     return Scaffold(
       appBar: AppBar(
         elevation: 0,

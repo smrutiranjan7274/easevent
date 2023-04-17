@@ -182,6 +182,8 @@ class _VerifyOtpState extends State<VerifyOtp> {
                             );
                           }
                         }
+                        if (!mounted) return;
+                        Navigator.pop(context);
                       }),
                   const SizedBox(height: 20),
                   Row(

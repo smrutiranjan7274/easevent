@@ -155,6 +155,8 @@ class _VerifyOtpState extends State<VerifyOtp> {
                             otpCode == null) {
                           AppSnackbar.showErrorSnackBar(
                               context, 'Enter proper 6-digit code');
+                          if (!mounted) return;
+                          Navigator.pop(context);
                         }
 
                         if (_isOtpVerified) {
@@ -239,7 +241,10 @@ class _VerifyOtpState extends State<VerifyOtp> {
       }
       if (e.code == 'invalid-verification-code') {
         AppSnackbar.showErrorSnackBar(context, 'Invalid OTP!');
+      } else if (e.code == 'session-expired') {
+        AppSnackbar.showErrorSnackBar(context, '${e.message}');
       }
+      Navigator.pop(context);
     }
     return false;
   }

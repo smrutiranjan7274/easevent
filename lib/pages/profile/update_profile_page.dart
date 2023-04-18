@@ -141,9 +141,9 @@ class _UpdateProfileState extends State<UpdateProfile> {
           await StorageRepo().uploadFile(_image, 'user/profile/${user.uid}');
       final uid = user.uid;
       // Update User Profile in Firebase Fireauth
-      user.updateDisplayName(
+      await user.updateDisplayName(
           '${_firstNameController.text.trim()} ${_lastNameController.text.trim()}');
-      user.updatePhotoURL(profileImageURL);
+      await user.updatePhotoURL(profileImageURL);
 
       // Update User Details in Firebase Firestore
       await FirebaseFirestore.instance.collection('users').doc(uid).update(

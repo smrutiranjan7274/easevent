@@ -202,7 +202,7 @@ class _RegisterWithPhoneState extends State<RegisterWithPhone> {
             if (error.code == 'invalid-phone-number') {
               AppSnackbar.showErrorSnackBar(context, error.message.toString());
             } else {
-              AppSnackbar.showErrorSnackBar(context, "Something went wrong!");
+              AppSnackbar.showErrorSnackBar(context, error.message.toString());
             }
           },
           codeSent: (verificationId, forceResendingToken) {

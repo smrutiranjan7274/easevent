@@ -1,7 +1,10 @@
 import 'package:easevent/screens/events/events_screen.dart';
 import 'package:easevent/screens/explore/explore_screen.dart';
 import 'package:easevent/screens/profile/profile_screen.dart';
+import 'package:easevent/utils/app_snackbar.dart';
 import 'package:flutter/material.dart';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -20,6 +23,28 @@ class _HomePageState extends State<HomePage> {
 
   // Buttom Navigation Bar Index
   int _selectedIndex = 0;
+
+  late ConnectivityResult _previousResult;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Subscribe to connectivity changes
+    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+      showConnectivitySnackBar(context, result);
+    });
+
+    // Check the initial connectivity state
+    Connectivity().checkConnectivity().then((ConnectivityResult result) {
+      setState(() {
+        _previousResult = result; // Set the initial value of _previousResult
+      });
+      if (result == ConnectivityResult.none) {
+        showConnectivitySnackBar(context, result);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,5 +87,16 @@ class _HomePageState extends State<HomePage> {
         body: screens[_selectedIndex],
       ),
     );
+  }
+
+  void showConnectivitySnackBar(
+      BuildContext context, ConnectivityResult result) {
+    if (result == ConnectivityResult.none) {
+      AppSnackbar.showErrorSnackBar(context, 'No Connection!');
+    } else if (result != ConnectivityResult.none &&
+        _previousResult == ConnectivityResult.none) {
+      AppSnackbar.showSuccessSnackBar(context, 'Back online');
+    }
+    _previousResult = result;
   }
 }

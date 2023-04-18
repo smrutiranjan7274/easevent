@@ -55,6 +55,8 @@ dependencies:
   pinput: ^2.2.31
   firebase_app_check: ^0.1.2+1
 
+  connectivity_plus: ^3.0.4
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

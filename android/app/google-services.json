@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "173833410537-8l35gpp6gssh5vqggum6bd0k3d3lmj43.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ems.easevent",
+            "certificate_hash": "baf0146c6faac8265cb13b78040bf9ec07d77cfb"
+          }
+        },
+        {
           "client_id": "173833410537-lh36j1rrus44528idb7a4dr79dgrd2k7.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
